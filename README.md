@@ -11,17 +11,17 @@ python -m pytest -q      # 28 tests
 python -m tests.eval_rag # retrieval quality report
 ```
 
-## Deploy publicly (Render)
+## Deploy publicly for free (Render)
 
 The repository includes a Render Blueprint in `render.yaml`. To publish the app:
 
 1. Push this project to a GitHub repository.
 2. In Render, choose **New → Blueprint**, connect the repository, and deploy the `aahar-ai` service.
-3. The service uses the included Dockerfile, binds to Render's assigned `PORT`, exposes `/api/health` as its health check, and stores SQLite data on a persistent disk.
+3. The service uses the included Dockerfile, binds to Render's assigned `PORT`, and exposes `/api/health` as its health check. This free configuration has no persistent disk: SQLite accounts, profiles, and logs can be erased when the service restarts, sleeps, or is redeployed.
 4. Optionally add `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` as a secret environment variable in Render. Never commit API keys. Without a key, grounded extractive answers still work.
 5. Open the `*.onrender.com` URL Render assigns to the service. Render terminates HTTPS for the public site.
 
-The Blueprint uses a paid instance with a persistent disk so account data survives redeploys. Check the provider's current pricing before deployment. This prototype stores allergy profiles and exposure logs: do not use it with real users or sensitive health information until privacy, consent, security, backups, and applicable healthcare regulations have been reviewed. A public deployment is not automatically a production-ready medical service.
+The Blueprint requests Render's free web-service tier and no paid add-ons. Hosting providers can change pricing and terms, so verify the final plan and estimated cost in Render before confirming deployment. Free instances may sleep when idle and have limited resources. This prototype stores allergy profiles and exposure logs in temporary storage: do not use it with real users or sensitive health information. A public deployment is not automatically a production-ready medical service.
 
 ## What is RAG here?
 

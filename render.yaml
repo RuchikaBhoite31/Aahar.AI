@@ -2,18 +2,14 @@ services:
   - type: web
     name: aahar-ai
     runtime: docker
-    plan: starter
+    plan: free
     region: oregon
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /api/health
-    disk:
-      name: aahar-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       - key: AAHAR_DB
-        value: /var/data/aahar.db
+        value: /tmp/aahar.db
       - key: AAHAR_LLM_PROVIDER
         value: auto
       - key: AAHAR_EMERGENCY_NUMBER
