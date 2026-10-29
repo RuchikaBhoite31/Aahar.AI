@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: aahar-ai
+    runtime: docker
+    plan: starter
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    disk:
+      name: aahar-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: AAHAR_DB
+        value: /var/data/aahar.db
+      - key: AAHAR_LLM_PROVIDER
+        value: auto
+      - key: AAHAR_EMERGENCY_NUMBER
+        value: "112 / 999"
