@@ -1,0 +1,74 @@
+{
+  "scenario_id": "party_intermediate",
+  "scenario_type": "multi_character",
+  "difficulty": "intermediate",
+  "title": "Birthday Party Challenge",
+  "description": "Navigate peer pressure and social situations when friends offer unsafe food",
+  "learning_objectives": [
+    "Stand firm when pressured to eat unsafe food",
+    "Explain allergy severity clearly to friends",
+    "Educate others about cross-contamination",
+    "Maintain friendships while prioritizing safety",
+    "Handle dismissive attitudes about allergies"
+  ],
+  "setting": {
+    "location": "Friend's birthday party",
+    "atmosphere": "Casual, festive, social pressure present",
+    "key_characters": [
+      {
+        "name": "Emma",
+        "role": "friend1",
+        "voice": "fable",
+        "personality": "Enthusiastic but pushy, wants everyone to enjoy the party"
+      },
+      {
+        "name": "Jake", 
+        "role": "friend2",
+        "voice": "shimmer",
+        "personality": "Skeptical about allergies, thinks people overreact"
+      },
+      {
+        "name": "Maya",
+        "role": "friend3", 
+        "voice": "nova",
+        "personality": "Curious but uninformed, learns throughout conversation"
+      }
+    ]
+  },
+  "target_allergen": "peanuts",
+  "trigger_food": "Birthday cake with peanut butter frosting",
+  "dialogue_file": "birthday_party_dialogue.json",
+  "success_criteria": [
+    "Clearly communicated allergy severity",
+    "Resisted peer pressure to try unsafe food",
+    "Educated friends about cross-contamination",
+    "Maintained positive relationships",
+    "Found safe alternatives"
+  ],
+  "assessment_rubric": {
+    "clarity": {
+      "description": "How clearly the user explained their allergy",
+      "max_points": 20
+    },
+    "firmness": {
+      "description": "How well they resisted peer pressure",
+      "max_points": 25
+    },
+    "education": {
+      "description": "How effectively they educated their friends",
+      "max_points": 20
+    },
+    "relationship_management": {
+      "description": "How well they maintained friendships",
+      "max_points": 20
+    },
+    "safety_priority": {
+      "description": "How well they prioritized their safety",
+      "max_points": 15
+    }
+  },
+  "total_possible_score": 100,
+  "passing_score": 70,
+  "time_estimate_minutes": 8,
+  "tags": ["social_pressure", "peer_education", "cross_contamination", "friendship", "party_safety"]
+}

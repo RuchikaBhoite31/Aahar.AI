@@ -1,0 +1,62 @@
+[
+  {
+    "speaker": "friend1",
+    "voice": "nova",
+    "line": "This place looks amazing! I've been dying to try their satay chicken skewers."
+  },
+  {
+    "speaker": "friend2", 
+    "voice": "shimmer",
+    "line": "Yeah! Let's all get that — we can share and it'll be cheaper too."
+  },
+  {
+    "speaker": "friend3",
+    "voice": "fable",
+    "line": "Perfect! You're okay with that, right? Everyone cool with sharing?"
+  },
+  {
+    "speaker": "user",
+    "voice": "alloy", 
+    "line": "Actually, I'm allergic to peanuts — satay has peanut sauce, so that's risky for me."
+  },
+  {
+    "speaker": "friend2",
+    "voice": "shimmer",
+    "line": "Oh come on, just don't eat the sauce part. The chicken itself should be fine."
+  },
+  {
+    "speaker": "friend1",
+    "voice": "nova",
+    "line": "Yeah, or maybe just have a tiny bit? I mean, how bad could it really be?"
+  },
+  {
+    "speaker": "friend3",
+    "voice": "fable",
+    "line": "Wait, is it actually that serious? Like, what happens if you accidentally have some?"
+  },
+  {
+    "speaker": "user",
+    "voice": "alloy",
+    "line": "It can cause anaphylaxis — my throat closes up and I can't breathe. I need my EpiPen."
+  },
+  {
+    "speaker": "friend1",
+    "voice": "nova", 
+    "line": "Oh my god, I had no idea! I'm so sorry. Let's definitely find something else."
+  },
+  {
+    "speaker": "friend2",
+    "voice": "shimmer",
+    "line": "Wow, that's terrifying. I didn't know allergies could be that serious."
+  },
+  {
+    "speaker": "waiter",
+    "voice": "onyx",
+    "line": "I can help with that. We have several dishes that are completely peanut-free."
+  },
+  {
+    "speaker": "friend3",
+    "voice": "fable",
+    "line": "Perfect! Let's make sure everything we order is safe for you."
+  }
+]

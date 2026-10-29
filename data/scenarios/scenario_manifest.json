@@ -1,0 +1,58 @@
+{
+  "scenarios": {
+    "restaurant_beginner": {
+      "file": "scenarios/restaurant_beginner.json",
+      "type": "restaurant",
+      "level": "beginner",
+      "name": "Restaurant Dining - Beginner",
+      "description": "Practice basic allergy disclosure with a friendly waiter",
+      "menuFile": "restaurant_menu.json",
+      "enabled": true,
+      "requiredScore": 0
+    },
+    "restaurant_intermediate": {
+      "file": "scenarios/restaurant_intermediate.json",
+      "type": "restaurant",
+      "level": "intermediate",
+      "name": "Restaurant Dining - Intermediate", 
+      "description": "Practice professional communication with moderate guidance and hidden allergens",
+      "menuFile": "restaurant_intermediate.json",
+      "enabled": true,
+      "requiredScore": 70
+    },
+            "restaurant_advanced": {
+          "file": "scenarios/restaurant_advanced.json",
+          "type": "restaurant",
+          "level": "advanced",
+          "name": "Restaurant Dining - Advanced",
+          "description": "Navigate complex menu items with hidden allergens and professional service",
+          "menuFile": "restaurant_advanced.json",
+          "enabled": true,
+          "requiredScore": 150
+        },
+    "party_intermediate": {
+      "file": "scenarios/party_intermediate.json",
+      "type": "party",
+      "level": "intermediate", 
+      "name": "Birthday Party Challenge",
+      "description": "Navigate peer pressure when friends offer unsafe food at a party",
+      "menuFile": null,
+      "enabled": true,
+      "requiredScore": 120,
+      "conversationType": "multi_character",
+      "dialogueFile": "birthday_party_dialogue.json"
+    },
+    "school_intermediate": {
+      "file": "scenarios/school_intermediate.json",
+      "type": "school",
+      "level": "intermediate",
+      "name": "School Cafeteria", 
+      "description": "Navigate lunch time with limited options and time pressure",
+      "menuFile": null,
+      "enabled": false,
+      "requiredScore": 100
+    }
+  },
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-01"
+} 

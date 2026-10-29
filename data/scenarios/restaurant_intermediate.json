@@ -1,0 +1,73 @@
+{
+  "id": "restaurant_intermediate",
+  "name": "Intermediate Restaurant Training",
+  "type": "restaurant",
+  "level": "intermediate",
+  "npcRole": "professional_waiter",
+  "scenarioContext": "You're dining at a moderately upscale restaurant with a professional service style. The waiter is efficient and expects you to communicate your needs clearly, but will provide helpful information when asked.",
+  "backgroundImagePath": "assets/images/backgrounds/restaurant_interior.png",
+  "initialDialogue": "Good evening. I'll be your server tonight. Have you had a chance to look at the menu?",
+  "enableAIDialogue": true,
+  "maxTurns": 12,
+  "difficultyMultiplier": 1.5,
+  "allergens": [
+    "milk", "egg", "fish", "crustaceans", "molluscs", "tree nuts", "peanuts", 
+    "soybeans", "gluten", "sesame", "celery", "mustard", "sulphites", "lupin"
+  ],
+  "allergyTips": [
+    "Speak clearly about your allergies - professional waiters expect direct communication",
+    "Ask specific questions about ingredients and preparation methods",
+    "Don't expect excessive guidance - take initiative in your safety questioning",
+    "Be prepared to make decisions based on the information provided"
+  ],
+  "positiveReinforcements": [
+    "I'll make note of that allergy for the kitchen.",
+    "Good question - let me get you that information.",
+    "I can certainly have that prepared without those ingredients.",
+    "That's a sensible choice given your dietary requirements."
+  ],
+  "gentlePrompts": [
+    "Do you have any dietary requirements I should be aware of?",
+    "Would you like me to go through the ingredients in that dish?",
+    "Are there any modifications you'd like me to request from the kitchen?"
+  ],
+  "behaviorRules": {
+    "guidanceLevel": 0.4,
+    "allowProbing": false,
+    "includePeerPressure": false,
+    "includeHiddenAllergens": true,
+    "allowClarification": true,
+    "feedbackStyle": "neutral",
+    "triggerWords": ["allergy", "allergic", "ingredients", "contains", "preparation", "modify"],
+    "patienceLevel": 3
+  },
+  "scoringRules": {
+    "basePoints": {
+      "allergy_disclosure": 45,
+      "safe_food_order": 35,
+      "ingredient_questions": 15,
+      "cross_contamination_awareness": 10
+    },
+    "bonusPoints": {
+      "early_disclosure": 8,
+      "detailed_questions": 7,
+      "preparation_method_inquiry": 5,
+      "modification_request": 6
+    },
+    "penalties": {
+      "unsafe_food_order": -35,
+      "no_allergy_disclosure": -25,
+      "insufficient_questioning": -10,
+      "rushed_decision": -8
+    },
+    "passingScore": 75,
+    "requireAllergyDisclosure": true,
+    "requireSafeOrder": true,
+    "requireIngredientQuestions": true,
+    "requiredActions": [
+      "disclose_allergies",
+      "ask_ingredient_questions",
+      "order_safe_food"
+    ]
+  }
+}

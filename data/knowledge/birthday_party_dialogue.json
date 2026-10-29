@@ -1,0 +1,102 @@
+[
+  {
+    "speaker": "friend1",
+    "voice": "fable",
+    "line": "Omg this cake is insane — here, you have to try it!"
+  },
+  {
+    "speaker": "user",
+    "voice": "alloy",
+    "line": "Actually, I can't. I'm allergic to peanuts, and I think there's peanut butter in that."
+  },
+  {
+    "speaker": "friend2",
+    "voice": "shimmer",
+    "line": "Come on Alex, one bite won't kill you."
+  },
+  {
+    "speaker": "friend3",
+    "voice": "nova",
+    "line": "Wait... is it really that serious? You've had this before, right?"
+  },
+  {
+    "speaker": "user",
+    "voice": "alloy",
+    "line": "Yes, it's really serious. Even a tiny bit could send me to the hospital."
+  },
+  {
+    "speaker": "friend1",
+    "voice": "fable",
+    "line": "But it's Sarah's birthday cake! Can't you just pick around the peanut parts?"
+  },
+  {
+    "speaker": "user",
+    "voice": "alloy",
+    "line": "It doesn't work like that. Cross-contamination means even touching the same knife could be dangerous for me."
+  },
+  {
+    "speaker": "friend2",
+    "voice": "shimmer",
+    "line": "You're being way too paranoid. My cousin has a nut allergy and she eats stuff like this all the time."
+  },
+  {
+    "speaker": "friend3",
+    "voice": "nova",
+    "line": "Yeah, and look — there's barely any nuts visible in this piece."
+  },
+  {
+    "speaker": "user",
+    "voice": "alloy",
+    "line": "I appreciate that you want me to enjoy the party, but I could literally stop breathing. That's not worth the risk."
+  },
+  {
+    "speaker": "friend1",
+    "voice": "fable",
+    "line": "Ugh, fine. But you're missing out on the best part of the party."
+  },
+  {
+    "speaker": "friend2",
+    "voice": "shimmer",
+    "line": "Wait, are you serious about the breathing thing? I thought allergies just made you feel sick."
+  },
+  {
+    "speaker": "user",
+    "voice": "alloy",
+    "line": "Anaphylaxis can close my throat and drop my blood pressure. I carry an EpiPen for emergencies."
+  },
+  {
+    "speaker": "friend3",
+    "voice": "nova",
+    "line": "Oh wow... I had no idea it was that intense. Sorry for pushing."
+  },
+  {
+    "speaker": "friend1",
+    "voice": "fable",
+    "line": "Yeah, I'm sorry too. I didn't realize how dangerous it actually is."
+  },
+  {
+    "speaker": "user",
+    "voice": "alloy",
+    "line": "Thanks for understanding. I can still have fun at the party — just without the cake!"
+  },
+  {
+    "speaker": "friend2",
+    "voice": "shimmer",
+    "line": "Hey, there's ice cream in the freezer. Want me to check if any flavors are safe for you?"
+  },
+  {
+    "speaker": "friend3",
+    "voice": "nova",
+    "line": "And we can totally just hang out and dance. The cake isn't everything."
+  },
+  {
+    "speaker": "user",
+    "voice": "alloy",
+    "line": "That sounds perfect! Thanks for being such good friends about this."
+  },
+  {
+    "speaker": "friend1",
+    "voice": "fable",
+    "line": "Of course! Your safety is way more important than cake. Let's go check out that ice cream!"
+  }
+]

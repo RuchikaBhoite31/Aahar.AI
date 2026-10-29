@@ -1,0 +1,67 @@
+{
+  "id": "restaurant_beginner",
+  "name": "Beginner Restaurant Training",
+  "type": "restaurant",
+  "level": "beginner",
+  "npcRole": "friendly_waiter",
+  "scenarioContext": "You're dining at a casual restaurant and need to place an order while keeping your allergies in mind. The waiter is friendly and supportive.",
+  "backgroundImagePath": "assets/images/backgrounds/restaurant_interior.png",
+  "initialDialogue": "Hi there! Welcome in. What can I get started for you today?",
+  "enableAIDialogue": true,
+  "maxTurns": 10,
+  "difficultyMultiplier": 1.0,
+  "allergens": [
+    "milk", "egg", "fish", "crustaceans", "molluscs", "tree nuts", "peanuts", 
+    "soybeans", "gluten", "sesame", "celery", "mustard", "sulphites", "lupin"
+  ],
+  "allergyTips": [
+    "Always disclose allergies before ordering",
+    "Ask about ingredients if you're unsure",
+    "Don't assume the waiter knows your allergy unless you say it clearly",
+    "It's okay to ask questions - restaurants want to keep you safe"
+  ],
+  "positiveReinforcements": [
+    "Thanks for letting me know about your allergy. I'll make sure we prepare it safely!",
+    "Good call mentioning that — I'll double check the ingredients for you.",
+    "Appreciate the heads-up. We take allergies seriously here.",
+    "Perfect! Let me suggest some safe options for you."
+  ],
+  "gentlePrompts": [
+    "Would you like to share any food preferences or restrictions before I make a suggestion?",
+    "Let me know if there's anything we should avoid for you.",
+    "Any dietary needs I should be aware of before we proceed?"
+  ],
+  "behaviorRules": {
+    "guidanceLevel": 0.8,
+    "allowProbing": false,
+    "includePeerPressure": false,
+    "includeHiddenAllergens": false,
+    "allowClarification": true,
+    "feedbackStyle": "supportive",
+    "triggerWords": ["allergy", "allergic", "ingredients", "contains"],
+    "patienceLevel": 5
+  },
+  "scoringRules": {
+    "basePoints": {
+      "allergy_disclosure": 50,
+      "safe_food_order": 30,
+      "ingredient_questions": 10
+    },
+    "bonusPoints": {
+      "early_disclosure": 10,
+      "polite_communication": 5
+    },
+    "penalties": {
+      "unsafe_food_order": -30,
+      "no_allergy_disclosure": -20
+    },
+    "passingScore": 70,
+    "requireAllergyDisclosure": true,
+    "requireSafeOrder": true,
+    "requireIngredientQuestions": false,
+    "requiredActions": [
+      "disclose_allergies",
+      "order_safe_food"
+    ]
+  }
+}

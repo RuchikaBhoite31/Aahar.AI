@@ -1,0 +1,9 @@
+fastapi>=0.110
+uvicorn>=0.29
+httpx>=0.27
+pydantic>=2.6
+numpy>=1.26
+scikit-learn>=1.4
+pytest>=8.0
+# optional, better semantic recall (set AAHAR_DENSE_MODEL=BAAI/bge-small-en-v1.5):
+# sentence-transformers>=3.0

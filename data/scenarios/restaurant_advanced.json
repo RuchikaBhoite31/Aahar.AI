@@ -1,0 +1,83 @@
+{
+  "id": "restaurant_advanced",
+  "name": "Advanced Restaurant Training",
+  "type": "restaurant",
+  "level": "advanced",
+  "npcRole": "professional_waiter",
+  "scenarioContext": "You're dining at an upscale restaurant with complex dishes and a professional but less accommodating service style. The menu contains sophisticated items with hidden allergens and cross-contamination risks.",
+  "backgroundImagePath": "assets/images/backgrounds/restaurant_interior.png",
+  "initialDialogue": "Good evening. Have you had a chance to review our menu? I'm here to take your order when you're ready.",
+  "enableAIDialogue": true,
+  "maxTurns": 15,
+  "difficultyMultiplier": 2.0,
+  "allergens": [
+    "milk", "egg", "fish", "crustaceans", "molluscs", "tree nuts", "peanuts", 
+    "soybeans", "gluten", "sesame", "celery", "mustard", "sulphites", "lupin"
+  ],
+  "allergyTips": [
+    "Advanced restaurants may have complex preparations - ask detailed questions",
+    "Hidden allergens are common in sauces, stocks, and garnishes", 
+    "Professional waiters expect specific questions about ingredients",
+    "Cross-contamination risks are higher with complex cooking methods"
+  ],
+  "positiveReinforcements": [
+    "Good question about the preparation method.",
+    "I appreciate you being specific about your allergy.",
+    "Let me check with the kitchen about that ingredient."
+  ],
+  "gentlePrompts": [
+    "Would you like me to explain any of the preparation methods?",
+    "Are there any dietary considerations I should be aware of?",
+    "Shall I go through the ingredients in that dish?"
+  ],
+  "behaviorRules": {
+    "guidanceLevel": 0.2,
+    "allowProbing": true,
+    "includePeerPressure": false,
+    "includeHiddenAllergens": true,
+    "allowClarification": true,
+    "feedbackStyle": "realistic",
+    "triggerWords": ["allergy", "allergic", "ingredients", "contains", "preparation", "cross-contamination"],
+    "patienceLevel": 2
+  },
+  "scoringRules": {
+    "basePoints": {
+      "allergy_disclosure": 50,
+      "safe_food_order": 40,
+      "ingredient_questions": 25,
+      "cross_contamination_awareness": 20,
+      "preparation_method_inquiry": 15,
+      "hidden_allergen_questions": 20
+    },
+    "bonusPoints": {
+      "detailed_questions": 15,
+      "multiple_safety_questions": 12,
+      "kitchen_verification_request": 10,
+      "alternative_suggestions": 8,
+      "specific_ingredient_inquiry": 10
+    },
+    "penalties": {
+      "unsafe_food_order": -50,
+      "no_allergy_disclosure": -40,
+      "ignored_hidden_allergens": -25,
+      "insufficient_questioning": -20,
+      "rushed_decision": -15,
+      "missed_preparation_questions": -15,
+      "no_cross_contamination_inquiry": -20
+    },
+    "passingScore": 150,
+    "maxPossibleScore": 200,
+    "requireAllergyDisclosure": true,
+    "requireSafeOrder": true,
+    "requireIngredientQuestions": true,
+    "criticalRequirements": [
+      "disclose_allergies",
+      "ask_ingredient_questions", 
+      "verify_preparation_method",
+      "ask_about_hidden_allergens",
+      "inquire_about_cross_contamination",
+      "confirm_safe_choice"
+    ],
+    "missedActionsPenalty": -10
+  }
+} 

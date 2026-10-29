@@ -1,0 +1,220 @@
+{
+  "restaurant_name": "allerteens Intermediate Training",
+  "menu_sections": [
+    {
+      "section": "starters",
+      "items": [
+        {
+          "id": "I1",
+          "name": "Caprese Salad",
+          "description": "Fresh mozzarella, tomatoes, basil with balsamic glaze",
+          "price": 8.95,
+          "allergens": [
+            "milk"
+          ],
+          "hidden_allergens": [
+            "sulphites in balsamic"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can I have it without the mozzarella?",
+            "Is the balsamic glaze sulphite-free?"
+          ]
+        },
+        {
+          "id": "I2",
+          "name": "Prawn Cocktail",
+          "description": "Chilled prawns with marie rose sauce",
+          "price": 9.50,
+          "allergens": [
+            "crustaceans",
+            "egg"
+          ],
+          "hidden_allergens": [
+            "mustard in sauce"
+          ],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Does the marie rose sauce contain mustard?",
+            "Are the prawns prepared separately from other shellfish?"
+          ]
+        },
+        {
+          "id": "I3",
+          "name": "Chicken Satay Skewers",
+          "description": "Marinated chicken with peanut dipping sauce",
+          "price": 7.75,
+          "allergens": [
+            "peanuts",
+            "soybeans"
+          ],
+          "hidden_allergens": [
+            "fish sauce in marinade"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can I get a different sauce instead of peanut?",
+            "Does the marinade contain fish sauce?"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "mains",
+      "items": [
+        {
+          "id": "I4",
+          "name": "Grilled Salmon Fillet",
+          "description": "With herb crust and lemon butter sauce",
+          "price": 18.95,
+          "allergens": [
+            "fish",
+            "milk"
+          ],
+          "hidden_allergens": [
+            "gluten in herb crust"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can the salmon be prepared without the herb crust?",
+            "Is the lemon butter sauce dairy-free?"
+          ]
+        },
+        {
+          "id": "I5",
+          "name": "Mushroom Risotto",
+          "description": "Creamy arborio rice with wild mushrooms and parmesan",
+          "price": 16.50,
+          "allergens": [
+            "milk"
+          ],
+          "hidden_allergens": [
+            "celery in stock",
+            "tree nuts in truffle oil"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Is the stock made with celery?",
+            "Does the truffle oil contain any nuts?"
+          ]
+        },
+        {
+          "id": "I6",
+          "name": "Beef Stir Fry",
+          "description": "Tender beef strips with vegetables in black bean sauce",
+          "price": 17.25,
+          "allergens": [
+            "soybeans",
+            "gluten (wheat)"
+          ],
+          "hidden_allergens": [
+            "sesame oil",
+            "fish sauce in black bean sauce"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can you prepare it without sesame oil?",
+            "Does the black bean sauce contain fish sauce?"
+          ]
+        },
+        {
+          "id": "I7",
+          "name": "Vegetarian Pasta",
+          "description": "Penne with roasted vegetables and pesto",
+          "price": 14.95,
+          "allergens": [
+            "gluten (wheat)",
+            "tree nuts (pine nuts)",
+            "milk"
+          ],
+          "hidden_allergens": [
+            "egg in pasta"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Is the pasta egg-free?",
+            "Can I get it without pesto or with nut-free pesto?"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "desserts",
+      "items": [
+        {
+          "id": "I8",
+          "name": "Chocolate Brownie",
+          "description": "Rich brownie with vanilla ice cream",
+          "price": 6.95,
+          "allergens": [
+            "gluten (wheat)",
+            "egg",
+            "milk"
+          ],
+          "hidden_allergens": [
+            "tree nuts in chocolate"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Does the chocolate contain nuts?",
+            "Can I have it without ice cream?"
+          ]
+        },
+        {
+          "id": "I9",
+          "name": "Fruit Sorbet",
+          "description": "Selection of seasonal fruit sorbets",
+          "price": 5.50,
+          "allergens": [],
+          "hidden_allergens": [
+            "sulphites in preserved fruit"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Are the fruits fresh or preserved?",
+            "Do any contain sulphites?"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "drinks",
+      "items": [
+        {
+          "id": "I10",
+          "name": "Fresh Fruit Smoothie",
+          "description": "Blended seasonal fruits with yogurt",
+          "price": 4.95,
+          "allergens": [
+            "milk"
+          ],
+          "hidden_allergens": [
+            "lupin protein in yogurt"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can you make it with dairy-free yogurt?",
+            "Does the yogurt contain lupin protein?"
+          ]
+        },
+        {
+          "id": "I11",
+          "name": "Iced Coffee",
+          "description": "Cold brew coffee with cream and sugar syrup",
+          "price": 3.75,
+          "allergens": [
+            "milk"
+          ],
+          "hidden_allergens": [
+            "sulphites in syrup"
+          ],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can I have it black or with alternative milk?",
+            "Are there sulphites in the sugar syrup?"
+          ]
+        }
+      ]
+    }
+  ]
+}

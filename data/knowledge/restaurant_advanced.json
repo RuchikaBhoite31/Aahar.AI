@@ -1,0 +1,207 @@
+{
+  "restaurant_name": "allerteens Advanced Training",
+  "menu_sections": [
+    {
+      "section": "starters",
+      "items": [
+        {
+          "id": "A1",
+          "name": "Goat Cheese & Beetroot Tart",
+          "description": "Warm tart with whipped goat cheese, beetroot, and toasted pine nuts",
+          "price": 8.95,
+          "allergens": ["milk", "tree nuts (pine nuts)", "egg", "gluten (wheat)"],
+          "hidden_allergens": ["mustard in vinaigrette"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can I get it without pine nuts?",
+            "Does the vinaigrette contain mustard or any sulphites?"
+          ]
+        },
+        {
+          "id": "A2",
+          "name": "Fried Calamari",
+          "description": "Crispy squid rings with garlic aioli",
+          "price": 9.50,
+          "allergens": ["molluscs", "egg", "gluten (wheat)"],
+          "hidden_allergens": ["milk in aioli", "sesame oil in batter"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Is the fryer used for items with shellfish or peanuts?",
+            "Can I skip the aioli and is the batter dairy-free?"
+          ]
+        },
+        {
+          "id": "A3",
+          "name": "Carrot & Coriander Soup",
+          "description": "Creamy carrot soup with coriander and warm bread",
+          "price": 7.25,
+          "allergens": ["milk", "celery", "gluten (wheat)"],
+          "hidden_allergens": ["soy in thickener", "sulphites in stock cube"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can it be made without cream or thickener?",
+            "Are there sulphites in the vegetable stock?"
+          ]
+        },
+        {
+          "id": "A4",
+          "name": "Mini Chicken Caesar Bites",
+          "description": "Bite-sized chicken skewers with Caesar drizzle",
+          "price": 8.25,
+          "allergens": ["fish (anchovies)", "milk", "egg", "gluten (wheat)", "mustard"],
+          "hidden_allergens": ["soy in sauce base"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Does the Caesar drizzle contain anchovies and soy?",
+            "Is it possible to serve without sauce?"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "mains",
+      "items": [
+        {
+          "id": "A5",
+          "name": "Irish Lamb Stew",
+          "description": "Slow cooked lamb with root vegetables",
+          "price": 18.75,
+          "allergens": ["celery"],
+          "hidden_allergens": ["gluten (barley) in stock", "sulphites in wine reduction"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Does the stew contain any gluten or sulphites?",
+            "Is the lamb stock homemade or prepackaged?"
+          ]
+        },
+        {
+          "id": "A6",
+          "name": "Vegan Wild Mushroom Risotto",
+          "description": "Creamy arborio rice with wild mushrooms and vegan parmesan",
+          "price": 16.25,
+          "allergens": ["soybeans", "celery"],
+          "hidden_allergens": ["sulphites in wine", "tree nuts in cheese substitute"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Is the vegan cheese nut-based?",
+            "Is there wine or sulphites in the cooking process?"
+          ]
+        },
+        {
+          "id": "A7",
+          "name": "Spiced Chickpea & Aubergine Wrap",
+          "description": "Served with tahini dressing and side salad",
+          "price": 14.25,
+          "allergens": ["sesame", "gluten (wheat)", "soybeans"],
+          "hidden_allergens": ["milk in dressing", "lupin in wrap flour"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Does the wrap contain lupin or dairy?",
+            "Can you use a different dressing without sesame?"
+          ]
+        },
+        {
+          "id": "A8",
+          "name": "Pan-Fried Hake with Dill Mash",
+          "description": "Served with lemon butter sauce",
+          "price": 20.95,
+          "allergens": ["fish", "milk"],
+          "hidden_allergens": ["mustard in sauce", "sulphites in preserved lemon"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Does the sauce contain mustard or sulphites?",
+            "Can the mash be prepared without dairy?"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "desserts",
+      "items": [
+        {
+          "id": "A9",
+          "name": "Irish Apple Crumble",
+          "description": "Topped with oats and cream",
+          "price": 6.50,
+          "allergens": ["milk", "gluten (wheat)"],
+          "hidden_allergens": ["sulphites in preserved fruit"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can I have it without cream or with a dairy-free option?",
+            "Is the fruit fresh or preserved with sulphites?"
+          ]
+        },
+        {
+          "id": "A10",
+          "name": "Lemon & Poppy Seed Loaf",
+          "description": "Served with a citrus glaze",
+          "price": 6.25,
+          "allergens": ["egg", "gluten (wheat)", "milk"],
+          "hidden_allergens": ["soy in emulsifier", "sulphites in lemon glaze"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Are there emulsifiers containing soy?",
+            "Is the glaze homemade or store-bought?"
+          ]
+        },
+        {
+          "id": "A11",
+          "name": "Almond Berry Tart",
+          "description": "Baked almond frangipane with berries",
+          "price": 7.50,
+          "allergens": ["tree nuts (almond)", "egg", "gluten (wheat)"],
+          "hidden_allergens": ["milk cross-contact", "lupin flour"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Does the tart base contain lupin flour?",
+            "Is there risk of dairy cross-contact in the preparation area?"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "drinks",
+      "items": [
+        {
+          "id": "A12",
+          "name": "Spiced Mulled Cider",
+          "description": "Served hot with cinnamon and orange",
+          "price": 6.00,
+          "allergens": ["sulphites"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Are the sulphite levels listed?",
+            "Is there any added flavouring or clarifier?"
+          ]
+        },
+        {
+          "id": "A13",
+          "name": "Iced Mocha Hazelnut Latte",
+          "description": "Coffee with hazelnut syrup and chocolate milk",
+          "price": 4.95,
+          "allergens": ["milk", "tree nuts (hazelnut)", "soybeans"],
+          "hidden_allergens": ["gluten in syrup thickener"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Can I get it without hazelnut syrup?",
+            "Does the syrup contain any soy or gluten?"
+          ]
+        },
+        {
+          "id": "A14",
+          "name": "Supergreen Smoothie",
+          "description": "Kale, banana, apple juice, whey protein",
+          "price": 5.95,
+          "allergens": ["milk"],
+          "hidden_allergens": ["lupin in protein blend", "soy lecithin"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can I skip the protein powder?",
+            "Are there alternatives without milk or soy?"
+          ]
+        }
+      ]
+    }
+  ]
+}

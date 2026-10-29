@@ -1,0 +1,311 @@
+{
+  "restaurant_name": "allerteens Training Restaurant",
+  "menu_sections": [
+    {
+      "section": "starters",
+      "items": [
+        {
+          "id": "S1",
+          "name": "Satay Chicken Skewers",
+          "description": "Grilled chicken with peanut satay sauce",
+          "price": 8.95,
+          "allergens": ["peanuts", "soybeans", "sesame"],
+          "hidden_allergens": ["gluten (wheat) in soy sauce"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Is the satay sauce 100% peanut based?",
+            "Is there wheat/soy sauce in the marinade?"
+          ]
+        },
+        {
+          "id": "S2",
+          "name": "Tomato & Basil Soup",
+          "description": "Creamed tomato soup with basil oil",
+          "price": 6.50,
+          "allergens": ["milk", "celery"],
+          "hidden_allergens": ["gluten (wheat) in croutons"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can I have it without cream or with a dairy-free alternative?",
+            "Are there croutons or thickening agents containing gluten?"
+          ]
+        },
+        {
+          "id": "S3",
+          "name": "Prawn Tempura",
+          "description": "Crispy battered prawns with soy dip",
+          "price": 9.95,
+          "allergens": ["crustaceans", "gluten (wheat)", "soybeans", "egg"],
+          "hidden_allergens": ["sesame in dip oil"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Is the fryer shared with other allergen-containing foods?",
+            "Does the dip contain sesame or wheat?"
+          ]
+        },
+        {
+          "id": "S4",
+          "name": "Hummus & Pitta",
+          "description": "Chickpea hummus with warm pitta bread",
+          "price": 7.25,
+          "allergens": ["sesame", "gluten (wheat)"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Is there any cross-contact with nuts?",
+            "Can I get gluten-free bread and is it prepared separately?"
+          ]
+        },
+        {
+          "id": "S5",
+          "name": "Buffalo Mozzarella & Pesto",
+          "description": "Mozzarella, cherry tomatoes, basil pesto",
+          "price": 8.75,
+          "allergens": ["milk", "tree nuts (cashew/pine nut)"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Which nuts are in the pesto (cashew or pine nut)?",
+            "Can you serve it without pesto and ensure no cross-contact?"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "mains",
+      "items": [
+        {
+          "id": "M1",
+          "name": "Butter Chicken",
+          "description": "Creamy tomato-based chicken curry",
+          "price": 16.95,
+          "allergens": ["milk"],
+          "hidden_allergens": ["cashew in sauce", "gluten (wheat) in naan"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Does the sauce contain cashew or other nuts?",
+            "Is there any wheat or gluten used as a thickener?"
+          ]
+        },
+        {
+          "id": "M2",
+          "name": "Thai Green Curry (Chicken/Tofu)",
+          "description": "Coconut-based curry with Thai herbs",
+          "price": 15.50,
+          "allergens": ["fish"],
+          "hidden_allergens": ["crustaceans in shrimp paste", "soybeans"],
+          "modifiable_to_safe": "sometimes",
+          "suggested_questions": [
+            "Is there fish sauce or shrimp paste in the curry?",
+            "Is tofu cooked on the same grill/fryer as meat or allergen items?"
+          ]
+        },
+        {
+          "id": "M3",
+          "name": "Margherita Pizza",
+          "description": "Classic tomato, mozzarella, basil",
+          "price": 13.95,
+          "allergens": ["gluten (wheat)", "milk"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Do you offer a gluten-free base, and is it prepared separately?",
+            "Is lactose-free cheese available?"
+          ]
+        },
+        {
+          "id": "M4",
+          "name": "Beef Burger with Brioche Bun",
+          "description": "House beef patty, cheese, mustard mayo",
+          "price": 14.75,
+          "allergens": ["gluten (wheat)", "milk", "egg", "mustard", "sesame (bun seeds)"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can I get a gluten-free bun wrapped separately?",
+            "Can you remove the mustard mayo and cheese?"
+          ]
+        },
+        {
+          "id": "M5",
+          "name": "Seafood Linguine",
+          "description": "Mussels, prawns, squid in white wine cream sauce",
+          "price": 18.95,
+          "allergens": ["molluscs", "crustaceans", "fish", "gluten (wheat)", "milk", "sulphites"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Is the pasta gluten-free and cooked in a separate pot?",
+            "Does the sauce contain shellfish stock?"
+          ]
+        },
+        {
+          "id": "M6",
+          "name": "Vegan Lentil Shepherd's Pie",
+          "description": "Lentils with root veg mash topping",
+          "price": 12.95,
+          "allergens": ["celery", "soybeans"],
+          "hidden_allergens": ["gluten (wheat) if gravy thickened with flour"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Is the gravy thickened with wheat flour?",
+            "Any shared utensils with dairy or nuts?"
+          ]
+        },
+        {
+          "id": "M7",
+          "name": "Pesto Pasta with Grilled Chicken",
+          "description": "Basil pesto, parmesan, pine nuts/cashews",
+          "price": 15.95,
+          "allergens": ["tree nuts (cashew/pine nut)", "milk", "gluten (wheat)"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Which nuts are in the pesto?",
+            "Can you make it without pesto and clean the pans first?"
+          ]
+        },
+        {
+          "id": "M8",
+          "name": "Falafel Wrap",
+          "description": "Falafel, tahini, salad in a flatbread",
+          "price": 11.95,
+          "allergens": ["sesame", "gluten (wheat)"],
+          "hidden_allergens": ["milk or egg in sauces (some versions)"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Is there egg or dairy in the sauces?",
+            "Is the wrap gluten free and prepared separately?"
+          ]
+        },
+        {
+          "id": "M9",
+          "name": "Sushi Platter",
+          "description": "Assorted nigiri & maki",
+          "price": 19.95,
+          "allergens": ["fish", "soybeans", "sesame"],
+          "hidden_allergens": ["gluten (wheat) in soy sauce", "crustaceans"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Do you have gluten-free tamari?",
+            "Any shared knives/boards with shellfish?"
+          ]
+        },
+        {
+          "id": "M10",
+          "name": "BBQ Ribs",
+          "description": "Pork ribs with house BBQ glaze",
+          "price": 17.50,
+          "allergens": ["soybeans", "celery", "mustard"],
+          "hidden_allergens": ["gluten (wheat) in sauce thickener", "sulphites in sauce"],
+          "modifiable_to_safe": "sometimes",
+          "suggested_questions": [
+            "Does the BBQ sauce contain wheat, celery or mustard?",
+            "Any sulphites in the marinade?"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "desserts",
+      "items": [
+        {
+          "id": "D1",
+          "name": "Chocolate Brownie with Ice Cream",
+          "description": "Warm brownie, vanilla ice cream",
+          "price": 7.95,
+          "allergens": ["milk", "egg", "gluten (wheat)"],
+          "hidden_allergens": ["tree nuts (cross-contact)", "peanuts (cross-contact)"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Is it made in a nut-free environment?",
+            "Is there a dairy-free or gluten-free option prepared separately?"
+          ]
+        },
+        {
+          "id": "D2",
+          "name": "Almond Frangipane Tart",
+          "description": "Classic tart with ground almonds",
+          "price": 6.95,
+          "allergens": ["tree nuts (almond)", "gluten (wheat)", "egg", "milk"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Is there any peanut cross-contact risk?",
+            "Any possibility of a nut-free version?"
+          ]
+        },
+        {
+          "id": "D3",
+          "name": "Pistachio Gelato",
+          "description": "House-made pistachio gelato",
+          "price": 5.95,
+          "allergens": ["tree nuts (pistachio)", "milk"],
+          "hidden_allergens": ["egg (some gelato bases)"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Is the gelato base egg-free?",
+            "Any peanut contamination possible?"
+          ]
+        },
+        {
+          "id": "D4",
+          "name": "Meringue with Berries",
+          "description": "Crisp meringue, fresh berries, whipped cream",
+          "price": 6.50,
+          "allergens": ["egg", "milk"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Can I have it without cream (milk)?",
+            "Is there any nut cross-contact in the kitchen?"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "drinks",
+      "items": [
+        {
+          "id": "DR1",
+          "name": "House White Wine",
+          "description": "Crisp dry white wine",
+          "price": 6.50,
+          "allergens": ["sulphites"],
+          "hidden_allergens": [],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Are sulphite levels listed?",
+            "Any flavourings or fining agents containing allergens?"
+          ]
+        },
+        {
+          "id": "DR2",
+          "name": "Craft Beer (Keg)",
+          "description": "Local pale ale on tap",
+          "price": 5.95,
+          "allergens": ["gluten (barley/wheat)"],
+          "hidden_allergens": ["sulphites"],
+          "modifiable_to_safe": false,
+          "suggested_questions": [
+            "Is there a gluten-free beer option?",
+            "Any sulphites added?"
+          ]
+        },
+        {
+          "id": "DR3",
+          "name": "Protein Shake (Gym Bar)",
+          "description": "Vanilla whey protein shake",
+          "price": 4.95,
+          "allergens": ["milk"],
+          "hidden_allergens": ["peanut/tree nut cross-contact in blenders"],
+          "modifiable_to_safe": true,
+          "suggested_questions": [
+            "Is the blender cleaned to avoid nut cross-contact?",
+            "Any soy lecithin or other allergens in the powder?"
+          ]
+        }
+      ]
+    }
+  ]
+} 

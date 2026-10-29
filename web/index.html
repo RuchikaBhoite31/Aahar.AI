@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#007C91">
+<title>Aahar.AI</title>
+<style>
+/* ===== Design tokens (identical to AllerTeens AppColors / AppConstants) ===== */
+:root{
+  --primary:#007C91; --primary-dark:#005A68; --primary-light:#4AA5AD;
+  --bg:#F6F6F6; --surface:#FFFFFF; --text:#505665; --text2:#939596;
+  --grey:#939596; --light:#F6F6F6; --warning:#F57C00; --error:#D32F2F; --fab:#0BC141;
+  --r:12px; --r-lg:16px; --r-sm:8px; --pad:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:Roboto,"Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;background:#dfe3e6;color:var(--text);font-size:16px;line-height:1.35}
+#app{position:relative;width:min(430px,100vw);height:100dvh;margin:0 auto;background:#fff;overflow:hidden;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow-y:auto;background:var(--bg)}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,textarea,select{font:inherit;color:var(--text)}
+.hidden{display:none!important}
+.row{display:flex;align-items:center}
+.grow{flex:1;min-width:0}
+svg{display:block;flex:none}
+
+/* ===== Buttons ===== */
+.btn{width:100%;height:56px;border-radius:var(--r);font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:12px;transition:opacity .15s,transform .05s}
+.btn:active{transform:scale(.99)}
+.btn[disabled]{opacity:.55;cursor:default}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-grey{background:var(--grey);color:#fff}
+.btn-outline{border:1px solid var(--text);color:var(--text);font-size:15px}
+.btn-sm{height:44px}
+.link{color:var(--primary);font-weight:600}
+
+/* ===== Onboarding ===== */
+.onb{padding:0 24px;background:var(--bg)}
+.onb-mid{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;margin-top:80px}
+.onb-head{font-size:28px;font-weight:400;color:var(--text2);line-height:1.3}
+.onb-head b{font-weight:700;color:var(--text)}
+.onb-name{font-size:32px;font-weight:700;color:var(--text);margin-top:120px}
+.onb-tag{font-size:14px;color:var(--text2);margin-top:8px}
+.onb-btns{display:flex;flex-direction:column;gap:16px;align-items:center;padding-bottom:40px}
+.onb-or{font-size:14px;color:var(--text2)}
+
+/* ===== Auth forms ===== */
+.auth{background:#fff;padding:0 24px 32px}
+.back{padding:12px 4px 0;margin-left:-8px}
+.auth h1{font-size:32px;font-weight:700;color:var(--primary);margin-top:12px}
+.auth .sub{color:var(--grey);margin-top:8px}
+.field{margin-top:20px}
+.field label{display:block;font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px}
+.inp{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--light);border-radius:var(--r);padding:0 16px;height:56px;transition:border-color .15s}
+.inp:focus-within{border:2px solid var(--primary);padding:0 15px}
+.inp input,.inp select,.inp textarea{flex:1;min-width:0;border:0;outline:0;background:transparent;height:100%;font-size:16px}
+.inp::placeholder,.inp input::placeholder{color:var(--text2)}
+.inp.ta{height:auto;padding:12px 16px;align-items:flex-start}
+.inp.ta textarea{resize:none;min-height:80px}
+.err{color:var(--error);font-size:12px;margin-top:6px;min-height:0}
+.divider{display:flex;align-items:center;gap:16px;margin:24px 0;color:var(--grey);font-size:14px;font-weight:600}
+.divider:before,.divider:after{content:"";flex:1;height:1px;background:var(--light);box-shadow:0 1px 0 #ececec}
+.btn-google{background:#fff;border:1px solid #dcdfe0;color:var(--text)}
+.alt{text-align:center;margin-top:24px;font-size:14px;color:var(--grey)}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:20px;font-size:14px;color:var(--grey)}
+.chk input{width:20px;height:20px;accent-color:var(--primary);margin-top:1px}
+
+/* ===== Allergy selection ===== */
+.sel{background:#fff;padding:0 24px 24px}
+.sel .top{display:flex;justify-content:flex-end;padding:12px 0}
+.sel h2{font-size:28px;font-weight:400;color:var(--text2)}
+.sel h2 b{font-weight:700;color:var(--text)}
+.tags{display:flex;flex-wrap:wrap;gap:10px}
+.tag{padding:12px 20px;border-radius:22px;background:var(--light);color:var(--text);font-size:14px;border:1px solid var(--light);transition:all .15s}
+.tag.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ===== Shell / Home ===== */
+.shell{display:flex;flex-direction:column;height:100%;background:#fff}
+.page{flex:1;position:relative;min-height:0}
+.page>.pane{position:absolute;inset:0;display:flex;flex-direction:column;overflow-y:auto}
+.nav{height:90px;margin-bottom:10px;background:#fff;box-shadow:0 -5px 10px rgba(0,0,0,.1);display:flex;justify-content:space-evenly;flex:none}
+.nav button{padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--text);min-width:64px}
+.nav button .ic{width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+.nav button.special .ic{width:40px;height:40px}
+.nav img{width:24px;height:24px;object-fit:contain}
+.nav button.special img{width:36px;height:36px}
+.nav button.on{color:var(--primary);font-weight:800}
+.mask{background-color:var(--text);-webkit-mask:var(--src) center/contain no-repeat;mask:var(--src) center/contain no-repeat}
+.nav button.on .mask{background-color:var(--primary)}
+.fab{position:absolute;right:16px;bottom:112px;width:56px;height:56px;border-radius:16px;background:var(--fab);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.28);z-index:5}
+.home{background:var(--primary)}
+.home-bar{display:flex;justify-content:flex-end;padding:16px;gap:12px}
+.avatar-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center}
+.greet{background:var(--primary);border-radius:0 0 24px 24px;padding:20px 16px 32px;color:#fff}
+.greet .h{font-size:24px;color:rgba(255,255,255,.9)}
+.greet .h b{font-weight:600;color:#fff}
+.greet .s{font-size:16px;color:rgba(255,255,255,.8);margin-top:8px}
+.home-body{flex:1;background:var(--bg);padding-top:24px;margin-top:-24px;padding-top:48px;border-radius:0}
+.card-link{display:flex;align-items:center;gap:16px;margin:8px 16px;padding:16px;background:var(--surface);border-radius:var(--r);border:1.5px solid rgba(0,124,145,.3);box-shadow:0 2px 4px rgba(0,124,145,.1);text-align:left;width:calc(100% - 32px)}
+.card-ic{width:60px;height:60px;border-radius:var(--r-sm);background:rgba(0,124,145,.1);display:flex;align-items:center;justify-content:center;font-size:32px;flex:none}
+.card-ic.risky{background:rgba(211,47,47,.12)}.card-ic.warn{background:rgba(245,124,0,.14)}
+.card-t{font-size:18px;font-weight:600;color:var(--text)}
+.card-s{font-size:14px;color:rgba(147,149,150,.7);margin-top:4px}
+.card-go{width:32px;height:32px;border-radius:50%;background:rgba(0,124,145,.1);display:flex;align-items:center;justify-content:center;flex:none;color:var(--primary)}
+.recent{margin:16px 16px 0}
+.recent h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px}
+.pill.safe{background:rgba(0,124,145,.12);color:var(--primary)}.pill.risky{background:rgba(211,47,47,.12);color:var(--error)}.pill.unknown,.pill.not_found{background:#eceeee;color:var(--text2)}
+
+/* ===== Teal page header (AI / Log / Learn) ===== */
+.thead{background:var(--primary);color:#fff;padding:20px;border-radius:0 0 24px 24px;flex:none}
+.thead.top{padding-top:calc(20px + env(safe-area-inset-top))}
+.thead h3{font-size:20px;font-weight:600}
+.thead p{font-size:14px;color:rgba(255,255,255,.9);margin-top:8px}
+.tabs{display:flex;background:#fff;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.05);margin:16px 16px 0;padding:4px;gap:2px}
+.tabs button{flex:1;padding:10px 4px;border-radius:var(--r-sm);font-size:12px;color:var(--text2);font-weight:500}
+.tabs.big button{font-size:14px;font-weight:600}
+.tabs button.on{background:var(--primary);color:#fff}
+.list{padding:24px 16px 16px;display:flex;flex-direction:column;gap:16px}
+.sc{background:#fff;border-radius:16px;box-shadow:0 0 15px rgba(0,0,0,.08);overflow:hidden;text-align:left;width:100%;display:block;position:relative}
+.sc .img{height:120px;background-size:cover;background-position:center;position:relative}
+.sc .img:after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.3))}
+.sc .b{padding:16px}
+.sc .t{font-size:16px;font-weight:600;color:var(--text)}
+.sc .d{font-size:14px;color:var(--text2);line-height:1.3;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sc .f{font-size:12px;color:var(--primary);margin-top:8px;font-weight:500}
+.sc.locked{opacity:.6}
+.lock{position:absolute;top:10px;right:10px;z-index:2;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:4px 10px;border-radius:12px}
+
+/* ===== Cards / Learn ===== */
+.search{margin:16px 16px 0}
+.search .inp{height:52px}
+.xc{background:var(--surface);border-radius:var(--r);box-shadow:0 0 8px rgba(0,124,145,.05);border:1px solid var(--light);overflow:hidden}
+.xc.open{border-color:var(--primary)}
+.xc>button{display:flex;align-items:center;gap:16px;padding:16px;width:100%;text-align:left}
+.xc .ico{width:48px;height:48px;border-radius:var(--r-sm);background:rgba(0,124,145,.1);display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+.xc .t{font-size:18px;font-weight:600;color:var(--primary)}
+.xc .chev{transition:transform .2s;color:var(--primary)}
+.xc.open .chev{transform:rotate(180deg)}
+.xc .body{display:none;padding:0 16px 16px 16px;font-size:15px;line-height:1.6;color:var(--text)}
+.xc.open .body{display:block}
+.xc .body p+p{margin-top:10px}
+mark{background:rgba(0,124,145,.18);color:inherit;border-radius:3px;padding:0 1px}
+.empty{text-align:center;padding:48px 32px;color:var(--text2)}
+.empty .big{font-size:56px;margin-bottom:12px}
+.empty h5{font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px}
+
+/* ===== App bar (pushed screens) ===== */
+.appbar{background:var(--primary);color:#fff;height:56px;display:flex;align-items:center;justify-content:center;position:relative;flex:none;font-size:20px;font-weight:600}
+.appbar .l{position:absolute;left:4px;top:0;height:56px;width:48px;display:flex;align-items:center;justify-content:center}
+.appbar .r{position:absolute;right:8px;top:0;height:56px;display:flex;align-items:center}
+.pad{padding:16px;display:flex;flex-direction:column;gap:12px}
+.card{background:#fff;border-radius:var(--r);box-shadow:0 1px 4px rgba(0,0,0,.12);padding:16px}
+.card h6{font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px}
+.cb{display:flex;align-items:center;gap:12px;padding:8px 0;font-size:16px}
+.cb input{width:20px;height:20px;accent-color:var(--primary);border-radius:4px}
+.sev{display:flex;gap:10px}
+.sev button{flex:1;padding:12px;border-radius:var(--r);border:1.5px solid var(--light);background:#fff;font-weight:600;color:var(--text2)}
+.sev button.on{color:#fff;border-color:transparent}
+.sw{display:flex;align-items:center;justify-content:space-between;font-size:16px}
+.sw input{width:44px;height:24px;accent-color:var(--primary)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 14px;border-radius:18px;background:var(--light);font-size:13px;color:var(--text)}
+.chip.on{background:var(--primary);color:#fff}
+.datehdr{font-size:14px;color:var(--text2)}
+
+/* ===== Calendar ===== */
+.cal{background:#fff;padding:12px 8px 8px}
+.cal-h{display:flex;align-items:center;justify-content:space-between;padding:0 8px 8px;font-size:17px;font-weight:600;color:var(--text)}
+.cal-h button{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--primary)}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px;text-align:center}
+.cal-g .dw{font-size:12px;color:var(--text2);padding:6px 0}
+.cal-g .d{height:40px;width:40px;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;font-size:14px;line-height:1;color:var(--text);margin:0 auto;border-radius:50%;overflow:visible}
+.cal-g .d.today{border:1.5px solid var(--primary)}
+.cal-g .d.sel{background:var(--primary);color:#fff}
+.cal-g .d.out{color:#c8c9ca}
+.cal-g .dot{position:absolute;bottom:5px;left:50%;margin-left:-3px;width:6px;height:6px;border-radius:50%;background:var(--error)}
+.cal-g .d.sel .dot{background:#fff}
+.logc{background:#fff;border-radius:var(--r);box-shadow:0 1px 4px rgba(0,0,0,.1);padding:16px;margin:0 16px 12px}
+.logc .k{font-size:12px;color:var(--text2);margin-top:8px}
+.logc .v{font-size:15px;color:var(--text)}
+.btn-fab-text{position:absolute;right:16px;bottom:112px}
+
+/* ===== Chat (Ask Aahar.AI + scenario) ===== */
+.chat{background:var(--bg)}
+.msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.bub{max-width:86%;padding:12px 14px;border-radius:16px;font-size:15px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap}
+.bub.me{align-self:flex-end;background:var(--primary);color:#fff;border-bottom-right-radius:4px}
+.bub.bot{align-self:flex-start;background:#fff;color:var(--text);border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.bub.bot.alert{border:1.5px solid var(--error)}
+.bub .em{display:block;background:rgba(211,47,47,.1);color:var(--error);padding:10px 12px;border-radius:10px;margin-bottom:10px;font-weight:600;white-space:normal}
+.cite{display:inline-block;font-size:11px;font-weight:700;color:var(--primary);background:rgba(0,124,145,.12);border-radius:6px;padding:0 5px;margin:0 1px;vertical-align:baseline}
+.src{margin-top:10px;border-top:1px solid var(--light);padding-top:8px;white-space:normal}
+.src summary{font-size:12px;color:var(--primary);font-weight:600;cursor:pointer;list-style:none}
+.src summary::-webkit-details-marker{display:none}
+.src .it{font-size:12px;color:var(--text2);margin-top:8px;line-height:1.4}
+.src .it b{color:var(--text);display:block}
+.meta{margin-top:8px;font-size:11px;color:var(--text2);display:flex;gap:8px;align-items:center;white-space:normal}
+.conf{display:inline-block;width:46px;height:5px;border-radius:3px;background:#e4e6e6;overflow:hidden;vertical-align:middle}
+.conf i{display:block;height:100%;background:var(--primary)}
+.sugg{display:flex;gap:8px;overflow-x:auto;padding:0 16px 8px;flex:none}
+.sugg button{flex:none;white-space:nowrap;padding:8px 14px;border-radius:18px;background:#fff;border:1px solid rgba(0,124,145,.35);color:var(--primary);font-size:13px}
+.compose{display:flex;gap:8px;align-items:flex-end;padding:8px 12px calc(12px + env(safe-area-inset-bottom));background:#fff;box-shadow:0 -2px 8px rgba(0,0,0,.06);flex:none}
+.compose .inp{flex:1;min-width:0;height:48px;border-radius:24px;padding:0 18px}
+.compose .inp input{width:100%}
+.round{width:48px;height:48px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.round.ghost{background:var(--light);color:var(--primary)}
+.round.rec{background:var(--error);color:#fff}
+.typing{display:flex;gap:4px;padding:4px 2px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--text2);animation:b 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+.disc{font-size:11px;color:var(--text2);text-align:center;padding:0 16px 6px}
+
+/* scenario stage */
+.stage{flex:none;height:230px;background-size:cover;background-position:center;position:relative;display:flex;align-items:flex-end;padding:12px 16px}
+.stage:after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.05),rgba(0,0,0,.45))}
+.stage .who{position:relative;z-index:1;display:flex;align-items:center;gap:10px;color:#fff;font-weight:600}
+.stage .av{width:44px;height:44px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid #fff}
+.stage .pts{position:absolute;right:12px;top:12px;z-index:1;background:rgba(0,0,0,.55);color:#fff;border-radius:14px;padding:4px 12px;font-size:13px;font-weight:600}
+.coach{align-self:center;max-width:92%;font-size:13px;background:rgba(0,124,145,.1);color:var(--primary-dark);border-radius:12px;padding:8px 12px;line-height:1.4}
+.coach.bad{background:rgba(245,124,0,.12);color:#9a5200}
+.score{font-size:64px;font-weight:700;color:var(--primary);text-align:center;margin-top:12px}
+
+/* misc */
+.toast{position:absolute;left:16px;right:16px;bottom:100px;z-index:50;background:var(--primary);color:#fff;border-radius:var(--r-sm);padding:14px 16px;font-size:15px;box-shadow:0 4px 14px rgba(0,0,0,.25);animation:in .2s}
+.toast.err{background:var(--error)}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.modal{position:absolute;inset:0;background:rgba(0,0,0,.45);z-index:40;display:flex;align-items:center;justify-content:center;padding:24px}
+.dlg{background:#fff;border-radius:16px;padding:20px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.dlg h3{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:600;color:var(--text)}
+.dlg .ib{width:36px;height:36px;border-radius:50%;background:rgba(211,47,47,.1);color:var(--error);display:flex;align-items:center;justify-content:center}
+.dlg .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.dlg .acts button{padding:10px 16px;border-radius:8px;font-weight:500}
+.dlg .acts .go{background:var(--error);color:#fff}
+.box{margin-top:12px;border:1px solid rgba(147,149,150,.3);border-radius:8px;padding:12px;font-size:14px;line-height:1.7}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));z-index:41;animation:up .22s}
+@keyframes up{from{transform:translateY(100%)}}
+.sheet .opt{display:flex;align-items:center;gap:14px;padding:14px 8px;width:100%;text-align:left;font-size:16px}
+.spin{width:20px;height:20px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:s .7s linear infinite}
+.spin.dark{border-color:rgba(0,124,145,.25);border-top-color:var(--primary)}
+@keyframes s{to{transform:rotate(360deg)}}
+.center{display:flex;align-items:center;justify-content:center;flex:1}
+video.cam{width:100%;flex:1;object-fit:cover;background:#000;min-height:0}
+.frame{position:absolute;left:12%;right:12%;top:30%;height:26%;border:3px solid #fff;border-radius:16px;box-shadow:0 0 0 999px rgba(0,0,0,.35);pointer-events:none}
+.verdict{border-radius:16px;padding:24px;text-align:center;color:#fff}
+.verdict.safe{background:var(--primary)}.verdict.risky{background:var(--error)}.verdict.unknown,.verdict.not_found{background:var(--grey)}
+.verdict .e{font-size:56px}.verdict h2{font-size:22px;margin-top:8px}.verdict p{margin-top:6px;opacity:.95}
+.splash{background:var(--primary);align-items:center;justify-content:center;color:#fff;font-size:34px;font-weight:700}
+@media (min-width:600px){#app{height:min(900px,100dvh);margin-top:max(0px,calc((100dvh - 900px)/2));border-radius:28px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* =====================================================================
+   Aahar.AI web client. Same palette, spacing, copy and flow as AllerTeens.
+   ===================================================================== */
+const APP='Aahar.AI';
+const SYMPTOMS=['Hives','Itchy skin','Swelling','Runny nose','Sneezing','Watery eyes','Cough','Wheezing','Shortness of breath','Nausea','Vomiting','Diarrhea','Stomach pain','Headache','Dizziness','Fatigue','Anxiety','Difficulty swallowing','Throat tightness','Rapid heartbeat'];
+const MEDS=['No antihistamine taken','Cetirizine (Zyrtec)','Loratadine (Claritin)','Fexofenadine (Allegra)','Levocetirizine (Xyzal)','Desloratadine (Neoclarityn)','Chlorphenamine (Piriton)','Diphenhydramine (Benadryl)','Promethazine (Phenergan)','Other antihistamine'];
+const SEV=[{v:'mild',l:'Mild',c:'#007C91'},{v:'moderate',l:'Moderate',c:'#F57C00'},{v:'severe',l:'Severe',c:'#D32F2F'}];
+const ICONS={'Peanut':'🥜','Milk':'🥛','Egg':'🥚','Wheat':'🌾','Soya':'🌱','Fish':'🐟','Crustaceans':'🦐','Molluscs':'🦪','Sesame':'🌰','Tree nuts':'🌰','Couscous, Semolina':'🌾','Alcohol':'🍷','Skin Prick Tests':'🩹','Blood tests':'🩸','Food Challenges':'🧪','Co-factors':'⚠️'};
+const ALWAYS_OPEN=new Set(['restaurant_beginner','restaurant_advanced','party_intermediate']); // same as original app
+const GROUPS={party_intermediate:['Emma','Jake','Maya'],dinner_with_friends:['Sam','Riley','Alex']};
+const SUGGEST=['What is anaphylaxis?','How do I use an adrenaline pen?','Can I drink alcohol with a food allergy?','What should I tell a waiter?','How do I handle peer pressure from friends?','Tips for flying with allergies'];
+
+const S={token:localStorage.getItem('aahar_token'),user:null,stack:[],tab:0,scTab:0,learnTab:'educational',learn:{},learnQ:'',calMonth:new Date(),calSel:null,logs:[],scans:[],chat:[],busy:false};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const val=id=>($('#'+id)?.value??'').trim();
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const fmtDate=d=>d.toLocaleDateString('en-GB',{weekday:'long',month:'short',day:'numeric',year:'numeric'});
+const pts=()=>+(localStorage.getItem('aahar_pts_'+S.user?.id)||0);
+const addPts=n=>localStorage.setItem('aahar_pts_'+S.user.id,pts()+n);
+
+/* ---------- icons ---------- */
+const I={
+ back:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z"/></svg>',
+ phone:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>',
+ chev:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>',
+ down:'<svg class="chev" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>',
+ scan:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 6.5v3h-3v-3h3M11 5H5v6h6V5zm-1.5 9.5v3h-3v-3h3M11 13H5v6h6v-6zm6.5-6.5v3h-3v-3h3M19 5h-6v6h6V5zm-6 8h1.5v1.5H13V13zm1.5 1.5H16V16h-1.5v-1.5zM16 13h1.5v1.5H16V13zm-3 3h1.5v1.5H13V16zm1.5 1.5H16V19h-1.5v-1.5zM16 16h1.5v1.5H16V16zm1.5-1.5H19V16h-1.5v-1.5zm0 3H19V19h-1.5v-1.5zM22 7h-2V4h-3V2h5v5zm0 15v-5h-2v3h-3v2h5zM2 22h5v-2H4v-3H2v5zM2 2v5h2V4h3V2H2z"/></svg>',
+ search:'<svg width="24" height="24" viewBox="0 0 24 24" fill="#939596"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
+ clear:'<svg width="22" height="22" viewBox="0 0 24 24" fill="#939596"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+ book:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>',
+ mail:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#939596" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2 7l8.9 5.3a2.2 2.2 0 002.2 0L22 7"/></svg>',
+ lock:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#939596" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 018 0v3"/><circle cx="12" cy="15.5" r="1.2"/></svg>',
+ user:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#939596" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>',
+ send:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>',
+ mic:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15a.998.998 0 00-.98-.85c-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08a6.993 6.993 0 005.91-5.78c.1-.6-.39-1.14-1-1.14z"/></svg>',
+ plus:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>',
+ trash:'<svg width="22" height="22" viewBox="0 0 24 24" fill="#D32F2F"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"/></svg>',
+ edit:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+ out:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>',
+ gicon:'<img src="/assets/icons/google_icon.png" width="28" height="28" alt="">',
+};
+const ico=(name,color)=>`<span class="mask" style="--src:url(/assets/icons/${name}.png);width:24px;height:24px;display:block;${color?`background-color:${color}`:''}"></span>`;
+
+/* ---------- plumbing ---------- */
+async function api(path,{method='GET',body}={}){
+  const r=await fetch('/api'+path,{method,headers:{'Content-Type':'application/json',...(S.token?{Authorization:'Bearer '+S.token}:{})},body:body?JSON.stringify(body):undefined});
+  let d=null;try{d=await r.json()}catch{}
+  if(!r.ok){
+    if(r.status===401&&S.token&&!path.startsWith('/auth')){doLogout(true)}
+    const det=d&&d.detail;
+    throw new Error(typeof det==='string'?det:Array.isArray(det)?'Please check the details you entered.':'Something went wrong. Please try again.');
+  }
+  return d;
+}
+function toast(msg,err){
+  $('.toast')?.remove();
+  const t=document.createElement('div');t.className='toast'+(err?' err':'');t.textContent=msg;$('#app').append(t);setTimeout(()=>t.remove(),3200);
+}
+const cur=()=>S.stack[S.stack.length-1];
+function push(name,p={}){S.stack.push({name,p});render()}
+function back(){if(S.stack.length>1){S.stack.pop();render()}}
+function reset(name,p={}){S.stack=[{name,p}];render()}
+function render(){
+  const v=cur(),def=V[v.name];
+  $('#app').innerHTML=def.html(v.p);
+  def.bind&&def.bind(v.p);
+}
+function validEmail(v){return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v)}
+function setErr(id,msg){const e=$('#e_'+id);if(e)e.textContent=msg||''}
+function mdLite(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\[(\d+)\]/g,'<span class="cite">$1</span>')}
+function scrollDown(sel){const m=$(sel);if(m)m.scrollTop=m.scrollHeight}
+const field=(id,label,ph,type='text',icon='',extra='')=>`<div class="field"><label for="${id}">${label}</label><div class="inp">${icon}<input id="${id}" type="${type}" placeholder="${ph}" ${extra}></div><div class="err" id="e_${id}"></div></div>`;
+const appbar=(t,right='')=>`<div class="appbar"><button class="l" data-act="back" aria-label="Back">${I.back}</button>${t}<div class="r">${right}</div></div>`;
+
+async function boot(){
+  if(S.token){try{S.user=await api('/me')}catch{S.token=null;localStorage.removeItem('aahar_token')}}
+  route();
+}
+function route(){
+  if(!S.user)return reset('onboarding');
+  if(!S.user.allergies.length&&!sessionStorage.getItem('aahar_skip_allergy'))return reset('allergy');
+  reset('home');
+}
+function doLogout(silent){
+  if(S.token&&!silent)api('/auth/logout',{method:'POST'}).catch(()=>{});
+  S.token=null;S.user=null;localStorage.removeItem('aahar_token');sessionStorage.removeItem('aahar_skip_allergy');S.chat=[];S.tab=0;
+  reset('onboarding');
+}
+function session(res){S.token=res.token;S.user=res.user;localStorage.setItem('aahar_token',res.token)}
+
+/* =====================================================================
+   VIEWS
+   ===================================================================== */
+const V={};
+
+/* ---- Onboarding ---- */
+V.onboarding={html:()=>`<div class="screen onb">
+  <div class="onb-mid">
+    <h1 class="onb-head">Train your mind with <b>AI</b> to<br>stay <b>Allergy-safe</b> in real life.</h1>
+    <div class="onb-name">${APP}</div>
+    <div class="onb-tag">Built to prepare you for the moments that matter.</div>
+  </div>
+  <div class="onb-btns">
+    <button class="btn btn-primary" data-act="signup">Get Started</button>
+    <button class="btn btn-grey" data-act="google">${I.gicon}<span>Continue with Google</span></button>
+    <div class="onb-or">Or</div>
+    <button class="btn btn-outline" data-act="login">Login to your Account</button>
+  </div></div>`};
+
+/* ---- Signup ---- */
+V.signup={html:()=>`<div class="screen auth">
+  <button class="back" data-act="back" style="color:var(--primary);width:40px">${I.back}</button>
+  <h1>Create Account</h1><div class="sub">Join ${APP} to manage your allergies safely</div>
+  ${field('name','Full Name','Enter your full name','text',I.user,'autocomplete="name"')}
+  ${field('email','Email Address','Enter your email address','email',I.mail,'autocomplete="email"')}
+  ${field('pw','Password','Create a strong password','password',I.lock,'autocomplete="new-password"')}
+  ${field('pw2','Confirm Password','Confirm your password','password',I.lock,'autocomplete="new-password"')}
+  <label class="chk"><input type="checkbox" id="agree"><span>I agree to the <span class="link">Terms of Service</span> and <span class="link">Privacy Policy</span></span></label>
+  <div class="err" id="e_agree"></div>
+  <div style="height:24px"></div>
+  <button class="btn btn-primary" id="go" data-act="doSignup">Create Account</button>
+  <div class="divider">OR</div>
+  <button class="btn btn-google" data-act="google">${I.gicon}<span>Sign up with Google</span></button>
+  <div class="alt">Already have an account? <button class="link" data-act="toLogin">Log In</button></div></div>`};
+
+/* ---- Login ---- */
+V.login={html:()=>`<div class="screen auth">
+  <button class="back" data-act="back" style="color:var(--primary);width:40px">${I.back}</button>
+  <h1>Welcome Back</h1><div class="sub">Log in to your ${APP} account</div>
+  ${field('email','Email Address','Enter your email address','email',I.mail,'autocomplete="email"')}
+  ${field('pw','Password','Enter your password','password',I.lock,'autocomplete="current-password"')}
+  <div style="text-align:right;margin-top:12px"><button class="link" data-act="forgot" style="font-size:14px">Forgot Password?</button></div>
+  <div style="height:24px"></div>
+  <button class="btn btn-primary" id="go" data-act="doLogin">Log In</button>
+  <div class="divider">OR</div>
+  <button class="btn btn-google" data-act="google">${I.gicon}<span>Sign in with Google</span></button>
+  <div class="alt">Don't have an account? <button class="link" data-act="toSignup">Sign Up</button></div></div>`};
+
+/* ---- Allergy selection ---- */
+V.allergy={html:()=>{
+  const first=S.user.name.split(' ')[0],sel=new Set(S.user.allergies);
+  return `<div class="screen sel">
+  <div class="top"><button data-act="skipAllergy" style="font-size:16px;color:var(--text2);padding:8px">Skip</button></div>
+  <h2>Welcome <b>${esc(first)}!</b></h2>
+  <div style="font-size:16px;color:var(--text2);margin-top:8px">Let's get to know your allergies</div>
+  <div style="font-size:16px;font-weight:600;color:var(--text);margin-top:32px">Pick what allergens you have</div>
+  <div class="field" style="margin-top:12px"><div class="inp"><input id="aq" placeholder="Search for allergens">${I.search}</div></div>
+  <div id="atags" class="tags" style="margin-top:20px"></div>
+  <div style="flex:1"></div>
+  <button class="btn btn-primary" data-act="saveAllergy" style="margin-top:24px">Continue</button></div>`},
+  bind(){
+    window._asel=new Set(S.user.allergies);
+    const draw=()=>{const q=val('aq').toLowerCase();
+      const list=ALLERGENS.filter(a=>a.toLowerCase().includes(q));
+      $('#atags').innerHTML=list.length?list.map(a=>`<button class="tag ${_asel.has(a)?'on':''}" data-act="tagTog" data-v="${esc(a)}">${esc(a)}</button>`).join(''):`<div class="empty" style="width:100%"><h5>No allergens found</h5>Try a different search term</div>`};
+    window._adraw=draw;draw();$('#aq').addEventListener('input',draw);
+  }};
+let ALLERGENS=['Peanuts','Tree nuts','Milk','Eggs','Soya','Wheat','Sesame','Celery','Mustard','Fish','Crustaceans','Molluscs','Lupin','Sulphites'];
+
+/* ---- Medical info ---- */
+V.medical={html:()=>{
+  const m=S.user.medical||{},ec=m.emergencyContact||{},first=S.user.name.split(' ')[0];
+  return `<div class="screen auth">
+  <div class="row" style="justify-content:flex-end;padding:12px 0"><button data-act="skipMed" style="font-size:16px;color:var(--text2);padding:8px">Skip</button></div>
+  <div style="font-size:28px;color:var(--text2)">Great job <b style="color:var(--text)">${esc(first)}!</b></div>
+  <div class="sub">Add details so help is one tap away</div>
+  <h6 style="font-size:18px;font-weight:600;color:var(--text);margin-top:28px">Medication Information</h6>
+  <div class="field"><label>Adrenaline Pen Type</label><div class="inp"><select id="pen">${['','EpiPen','Jext','Emerade','Neffy'].map(x=>`<option ${m.penType===x?'selected':''} value="${x}">${x||'Select Adrenaline Pen Type'}</option>`).join('')}</select></div></div>
+  <div class="field"><label>Dosage</label><div class="inp"><select id="dose">${['','0.15 mg','0.3 mg','0.5 mg','1 mg','2 mg'].map(x=>`<option ${m.dosage===x?'selected':''} value="${x}">${x||'Select Dosage'}</option>`).join('')}</select></div></div>
+  <h6 style="font-size:18px;font-weight:600;color:var(--text);margin-top:32px">Emergency Contact</h6>
+  ${field('cn','Contact Name','e.g., Mom, Dad, Guardian','text','','value="'+esc(ec.name||'')+'"')}
+  ${field('cp','Phone Number','e.g., (555) 123-4567','tel','','value="'+esc(ec.phone||'')+'"')}
+  ${field('cr','Relationship','e.g., Parent, Guardian, Friend','text','','value="'+esc(ec.relationship||'')+'"')}
+  <button class="btn btn-primary" data-act="saveMed" style="margin-top:28px">Continue</button></div>`}};
+
+/* ---- Home shell ---- */
+V.home={html:()=>{
+  const nav=(i,icon,label,special)=>`<button class="${S.tab===i?'on':''} ${special?'special':''}" data-act="tab" data-v="${i}"><span class="ic">${icon}</span>${label}</button>`;
+  return `<div class="shell"><div class="page"><div class="pane" id="pane"></div>
+    <button class="fab" id="sosfab" data-act="sos" aria-label="Call emergency contact">${I.phone}</button></div>
+    <div class="nav">${nav(0,`<span class="mask" style="--src:url(/assets/icons/home-03.png);width:24px;height:24px"></span>`,'Home')}
+    ${nav(1,`<span class="mask" style="--src:url(/assets/icons/chat-bot.png);width:36px;height:36px"></span>`,'AI',1)}
+    ${nav(2,`<span class="mask" style="--src:url(/assets/icons/calendar-03.png);width:24px;height:24px"></span>`,'Log')}
+    ${nav(3,I.book,'Learn')}</div></div>`},
+  bind(){drawTab();}};
+
+function drawTab(){
+  const pane=$('#pane');if(!pane)return;
+  pane.className='pane';
+  pane.innerHTML=[tabHome,tabAI,tabLog,tabLearn][S.tab]();
+  [null,bindAI,bindLog,bindLearn][S.tab]?.();
+  $$('.nav button').forEach((b,i)=>b.classList.toggle('on',i===S.tab));
+  if(S.tab===0)loadScans();
+}
+
+function tabHome(){
+  const first=S.user.name.split(' ')[0];
+  const last=S.scans[0];
+  const sc=!last?{ic:'🔍',t:'Scan Food for Allergens',s:'Scan grocery barcodes instantly',cls:''}
+    :last.verdict==='risky'?{ic:'❌',t:last.name||'Unknown Product',s:'Last scan: Allergen risk found',cls:'risky'}
+    :last.verdict==='safe'?{ic:'✅',t:last.name||'Unknown Product',s:'Last scan: No allergens detected',cls:''}
+    :{ic:'❓',t:last.name||'Unknown Product',s:'Last scan: Unable to verify',cls:'warn'};
+  return `<div class="home" style="min-height:100%;display:flex;flex-direction:column">
+  <div class="home-bar"><button class="avatar-btn" data-act="profile" aria-label="Profile"><span class="mask" style="--src:url(/assets/icons/Vector.png);width:16px;height:16px;background-color:#fff"></span></button></div>
+  <div class="greet"><div class="h">Hey <b>${esc(first)},</b></div><div class="s">Ready to take charge today?</div></div>
+  <div class="home-body" style="margin-top:-24px;padding-top:48px">
+    <button class="card-link" data-act="exposure"><div class="card-ic">⚠️</div><div class="grow"><div class="card-t">Accidental Exposure</div><div class="card-s">Log your exposure details</div></div><div class="card-go">${I.chev}</div></button>
+    <button class="card-link" data-act="scan"><div class="card-ic ${sc.cls}">${sc.ic}</div><div class="grow"><div class="card-t">${esc(sc.t)}</div><div class="card-s">${sc.s}</div></div><div class="card-go">${I.scan}</div></button>
+    <button class="card-link" data-act="ask"><div class="card-ic"><span class="mask" style="--src:url(/assets/icons/chat-bot.png);width:36px;height:36px;background-color:var(--primary)"></span></div><div class="grow"><div class="card-t">Ask ${APP}</div><div class="card-s">Allergy answers from trusted sources</div></div><div class="card-go">${I.chev}</div></button>
+  </div></div>`;
+}
+async function loadScans(){try{S.scans=await api('/scans');if(S.tab===0&&cur().name==='home'){const old=$('.card-link:nth-child(2)');if(old)$('#pane').innerHTML=tabHome()}}catch{}}
+
+/* ---- AI scenarios tab ---- */
+const LEVELS=['group','beginner','intermediate','advanced'],LNAME=['Groups','Beginner','Intermediate','Advanced'];
+async function tabAIdata(){if(!S.scen)S.scen=await api('/scenarios')}
+function tabAI(){
+  if(!S.scen){tabAIdata().then(()=>S.tab===1&&drawTab()).catch(e=>toast(e.message,1));return `<div class="center"><div class="spin dark"></div></div>`}
+  const lvl=LEVELS[S.scTab],p=pts();
+  const items=S.scen.filter(s=>lvl==='group'?(s.type==='party'||s.type==='group'||s.id==='dinner_with_friends'):(s.level===lvl&&s.type==='restaurant'));
+  return `<div style="background:var(--primary);display:flex;flex-direction:column;min-height:100%">
+  <div class="thead top" style="padding-bottom:24px"><h3>AI Training Scenarios</h3><p>Choose a scenario to practice safe allergy communication</p></div>
+  <div style="background:var(--bg);flex:1;margin-top:-24px;padding-top:24px">
+  <div class="tabs" style="margin-top:16px">${LNAME.map((n,i)=>`<button class="${i===S.scTab?'on':''}" data-act="scTab" data-v="${i}">${n}</button>`).join('')}</div>
+  <div class="list">${items.map(s=>{
+    const locked=!ALWAYS_OPEN.has(s.id)&&s.required>p;
+    const who=GROUPS[s.id]?`AI Friends: ${GROUPS[s.id].join(', ')}`:'AI Waiter';
+    return `<button class="sc ${locked?'locked':''}" style="height:240px" data-act="${locked?'locked':'scenario'}" data-v="${s.id}" data-n="${s.required}">
+      ${locked?`<div class="lock">🔒 Unlock with ${s.required} points</div>`:''}
+      <div class="img" style="background-image:url('${s.image}')"></div>
+      <div class="b"><div class="t">${esc(s.title)}</div><div class="d">${esc(s.description)}</div><div class="f">${who}</div></div></button>`}).join('')||`<div class="empty"><h5>No scenarios yet</h5>Check another level</div>`}</div></div></div>`;
+}
+function bindAI(){}
+
+/* ---- Log tab ---- */
+function tabLog(){
+  loadLogs();
+  const m=S.calMonth,y=m.getFullYear(),mo=m.getMonth(),first=new Date(y,mo,1),days=new Date(y,mo+1,0).getDate(),off=(first.getDay()+6)%7;
+  const marks=new Set(S.logs.map(l=>l.date)),today=iso(new Date()),sel=S.calSel;
+  let cells=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="dw">${d}</div>`).join('');
+  for(let i=0;i<off;i++)cells+='<div></div>';
+  for(let d=1;d<=days;d++){const k=iso(new Date(y,mo,d));cells+=`<button class="d ${k===today?'today':''} ${k===sel?'sel':''}" data-act="calDay" data-v="${k}">${d}${marks.has(k)?'<i class="dot"></i>':''}</button>`}
+  const dayLogs=S.logs.filter(l=>l.date===sel);
+  let body;
+  if(!sel)body=`<div class="empty"><div class="big">📅</div><h5>Select a date to view logs</h5></div>`;
+  else{
+    const d=new Date(sel+'T12:00:00');
+    body=`<div style="padding:16px 16px 8px;font-weight:600;color:var(--text)">${fmtDate(d)}</div>`+(dayLogs.length?dayLogs.map(logCard).join(''):`<div class="empty" style="padding:24px"><h5>No exposure logged</h5>Nothing recorded for this day</div>`);
+  }
+  return `<div style="display:flex;flex-direction:column;min-height:100%;background:var(--bg)">
+  <div class="thead top"><h3>Exposure Logs</h3><p>Track incidents and spot patterns over time</p></div>
+  <div class="cal" style="margin:16px 16px 0;border-radius:var(--r);box-shadow:0 1px 4px rgba(0,0,0,.1)"><div class="cal-h"><button data-act="calPrev">${I.back}</button><span>${m.toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</span><button data-act="calNext" style="transform:scaleX(-1)">${I.back}</button></div><div class="cal-g">${cells}</div></div>
+  ${body}
+  <div style="padding:8px 16px 96px;margin-top:auto"><button class="btn btn-primary" data-act="exposure">${I.plus}Log Exposure</button></div></div>`;
+}
+function logCard(l){
+  const sv=SEV.find(s=>s.v===l.severity)||SEV[0];
+  const rows=[['Food Eaten',l.foodEaten],['Symptoms',(l.symptoms||[]).join(', ')],['Time to First Symptom',l.timeToFirstSymptom],['Medication Used',l.tookMedication?(l.medicationUsed||'Medication taken'):'No medication taken'],['Notes',l.notes]].filter(r=>r[1]);
+  return `<div class="logc"><div class="row" style="justify-content:space-between"><span class="pill" style="background:${sv.c}22;color:${sv.c}">${sv.l}</span><button data-act="delLog" data-v="${l.id}" aria-label="Delete">${I.trash}</button></div>${rows.map(([k,v])=>`<div class="k">${k}</div><div class="v">${esc(v)}</div>`).join('')}</div>`;
+}
+let _logsLoading=false;
+async function loadLogs(){if(_logsLoading||S.logsLoaded)return;_logsLoading=true;try{S.logs=await api('/logs');S.logsLoaded=true;if(S.tab===2&&cur().name==='home')drawTab()}catch{}_logsLoading=false}
+function bindLog(){}
+
+/* ---- Learn tab ---- */
+function tabLearn(){
+  const m=S.learnTab;
+  if(!S.learn[m]){api('/learn/'+m).then(d=>{S.learn[m]=d;S.tab===3&&drawTab()}).catch(()=>{S.learn[m]={error:1};S.tab===3&&drawTab()});}
+  const d=S.learn[m],q=S.learnQ.toLowerCase();
+  let body;
+  if(!d)body=`<div class="center" style="padding:48px"><div class="spin dark"></div></div>`;
+  else if(d.error)body=`<div class="empty"><div class="big">⚠️</div><h5>Failed to Load Content</h5><button class="btn btn-primary btn-sm" style="width:auto;padding:0 24px;margin-top:12px" data-act="learnRetry">Retry</button></div>`;
+  else{
+    const secs=d.sections.filter(s=>!q||(s.heading+' '+s.content.join(' ')).toLowerCase().includes(q));
+    body=secs.length?`<div class="list" style="padding-top:16px;gap:8px">${secs.map(s=>{const h=s.heading.replace(/:$/,'');const ic=Object.entries(ICONS).find(([k])=>h.toLowerCase().includes(k.toLowerCase()))?.[1]||'📋';
+      const open=!!q;return `<div class="xc ${open?'open':''}"><button data-act="xc"><div class="ico">${ic}</div><div class="grow t">${hl(h,q)}</div>${I.down}</button><div class="body">${s.content.map(p=>`<p>${hl(p,q)}</p>`).join('')}</div></div>`}).join('')}</div>`
+      :`<div class="empty"><div class="big">🔎</div><h5>No Results Found</h5>Try searching with different keywords or check your spelling.<br><button class="btn btn-primary btn-sm" style="width:auto;padding:0 20px;margin-top:16px" data-act="askFromLearn">Ask ${APP} instead</button></div>`;
+  }
+  return `<div style="min-height:100%;display:flex;flex-direction:column;background:var(--bg)">
+  <div class="thead top"><h3>Learn</h3><p>Educational resources about allergens and safety</p></div>
+  <div class="tabs big"><button class="${m==='educational'?'on':''}" data-act="lt" data-v="educational">Allergen Education</button><button class="${m!=='educational'?'on':''}" data-act="lt" data-v="behavioural">Behaviour &amp; Safety</button></div>
+  <div class="search"><div class="inp">${I.search}<input id="lq" placeholder="Search allergens or topics..." value="${esc(S.learnQ)}">${S.learnQ?`<button data-act="lclear">${I.clear}</button>`:''}</div></div>
+  <div id="lbody">${body}</div></div>`;
+}
+const hl=(t,q)=>{t=esc(t);if(!q)return t;const e=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/&/g,'&amp;');return t.replace(new RegExp('('+e+')','gi'),'<mark>$1</mark>')};
+function bindLearn(){
+  const i=$('#lq');if(!i)return;
+  i.addEventListener('input',()=>{S.learnQ=i.value;const pos=i.selectionStart;drawTab();const n=$('#lq');n.focus();n.setSelectionRange(pos,pos)});
+}
+
+/* ---- Symptom / exposure form ---- */
+V.exposure={html:p=>{
+  const d=p.date?new Date(p.date+'T12:00:00'):new Date();p.date=iso(d);
+  return `<div class="screen">${appbar('Accidental Exposure')}
+  <div class="pad" style="padding-bottom:32px">
+    <div class="card"><h6>Date</h6><div class="datehdr">${fmtDate(d)}</div><div class="inp" style="margin-top:10px;height:48px"><input type="date" id="xdate" value="${p.date}" max="${iso(new Date())}"></div></div>
+    <div class="card"><h6>Food Eaten</h6><div class="inp"><input id="xfood" placeholder="Enter the food that caused the reaction..."></div></div>
+    <div class="card"><h6>Symptoms</h6><div class="datehdr" style="margin-bottom:6px">Select all symptoms you experienced today:</div>
+      ${SYMPTOMS.map(s=>`<label class="cb"><input type="checkbox" class="sx" value="${s}"><span>${s}</span></label>`).join('')}</div>
+    <div class="card"><h6>Severity</h6><div class="sev">${SEV.map(s=>`<button data-act="sev" data-v="${s.v}" data-c="${s.c}" class="${s.v==='mild'?'on':''}" style="${s.v==='mild'?`background:${s.c}`:''}">${s.l}</button>`).join('')}</div></div>
+    <div class="card"><h6>Time to First Symptom</h6><div class="datehdr" style="margin-bottom:8px">How much time passed from eating to first symptom?</div><div class="inp"><input id="xtime" placeholder="e.g., 10 minutes"></div></div>
+    <div class="card"><h6>Medication</h6><div class="sw"><span>Did you take any allergy medication today?</span><input type="checkbox" id="xmed"></div>
+      <div id="xmedbox" class="hidden"><div class="datehdr" style="margin:12px 0 8px">What medication did you take?</div><div class="chips">${MEDS.map(m=>`<button class="chip" data-act="medchip" data-v="${m}">${m}</button>`).join('')}</div>
+      <div class="inp" style="margin-top:10px"><input id="xmedname" placeholder="Medication Used"></div>
+      <div class="datehdr" style="margin:12px 0 8px">When did you receive or take treatment?</div><div class="inp"><input id="xtreat" placeholder="e.g., 5 minutes after"></div></div></div>
+    <div class="card"><h6>Notes</h6><div class="datehdr" style="margin-bottom:8px">Any additional details about your symptoms?</div><div class="inp ta"><textarea id="xnotes" rows="3" placeholder="Enter any additional notes..."></textarea></div></div>
+    <button class="btn btn-primary" id="go" data-act="saveLog">Save Log</button>
+  </div></div>`},
+  bind(){$('#xmed').addEventListener('change',e=>$('#xmedbox').classList.toggle('hidden',!e.target.checked))}};
+
+/* ---- Barcode scan ---- */
+V.scan={html:()=>`<div class="screen" style="background:#000">${appbar('Scan Food for Allergens')}
+  <div style="position:relative;flex:1;display:flex;flex-direction:column;min-height:0">
+    <video class="cam" id="cam" playsinline muted></video><div class="frame"></div>
+    <div id="camMsg" style="position:absolute;top:16px;left:16px;right:16px;text-align:center;color:#fff;font-size:14px">Point your camera at a barcode</div>
+  </div>
+  <div style="background:#fff;padding:16px;border-radius:20px 20px 0 0">
+    <div class="datehdr" style="margin-bottom:8px">Or type the barcode number</div>
+    <div class="row" style="gap:8px"><div class="inp grow" style="height:48px"><input id="bc" inputmode="numeric" placeholder="e.g., 5000169005432"></div><button class="round" data-act="manualScan" aria-label="Check">${I.send}</button></div>
+  </div></div>`,
+  async bind(){
+    if(!('BarcodeDetector' in window)||!navigator.mediaDevices){$('#camMsg').textContent='Camera scanning is not supported in this browser. Type the barcode number below.';return}
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+      const v=$('#cam');v.srcObject=stream;await v.play();window._stream=stream;
+      const det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128']});
+      let done=false;
+      const tick=async()=>{if(done||cur().name!=='scan')return stopCam();try{const r=await det.detect(v);if(r[0]){done=true;stopCam();return doScan(r[0].rawValue)}}catch{}setTimeout(tick,350)};tick();
+    }catch{$('#camMsg').textContent='Camera permission denied. Type the barcode number below.'}
+  }};
+function stopCam(){window._stream?.getTracks().forEach(t=>t.stop());window._stream=null}
+async function doScan(code){
+  S.stack[S.stack.length-1]={name:'scanning',p:{}};render();
+  try{const r=await api('/scan/'+encodeURIComponent(code));S.stack.pop();push('scanResult',r)}
+  catch(e){S.stack.pop();toast(e.message,1);render()}
+}
+V.scanning={html:()=>`<div class="screen">${appbar('Checking...')}<div class="center" style="flex-direction:column;gap:16px"><div class="spin dark" style="width:36px;height:36px"></div><div style="color:var(--text2)">Checking for allergens...</div></div></div>`};
+V.scanResult={html:r=>{
+  const ic={safe:'✅',risky:'⚠️',unknown:'❓',not_found:'🔎'}[r.verdict]||'❓';
+  const ttl={safe:'Looks safe for you',risky:'Allergen risk found',unknown:'Unable to verify',not_found:'Product not found'}[r.verdict];
+  return `<div class="screen">${appbar('Scan Result')}<div class="pad">
+  <div class="verdict ${r.verdict}"><div class="e">${ic}</div><h2>${ttl}</h2><p>${esc(r.message)}</p></div>
+  ${r.name?`<div class="card"><h6>${esc(r.name)}</h6><div class="datehdr">${esc(r.brand||'')} · ${esc(r.barcode)}</div>
+    ${r.contains?.length?`<div class="datehdr" style="margin:12px 0 6px">Contains</div><div class="chips">${r.contains.map(a=>`<span class="chip ${r.matched?.includes(a)?'on':''}" style="${r.matched?.includes(a)?'background:var(--error)':''}">${esc(a)}</span>`).join('')}</div>`:''}
+    ${r.traces?.length?`<div class="datehdr" style="margin:12px 0 6px">May contain traces of</div><div class="chips">${r.traces.map(a=>`<span class="chip">${esc(a)}</span>`).join('')}</div>`:''}</div>`:''}
+  <div class="datehdr" style="text-align:center">Always double-check the label. This is a helper, not a guarantee.</div>
+  <button class="btn btn-primary" data-act="rescan">Scan another</button></div></div>`}};
+
+/* ---- Ask Aahar.AI (RAG chat) ---- */
+V.ask={html:p=>`<div class="screen chat">${appbar('Ask '+APP)}
+  <div class="msgs" id="msgs">${S.chat.length?S.chat.map(msgHtml).join(''):welcome()}</div>
+  <div class="sugg" id="sugg">${SUGGEST.map(s=>`<button data-act="sugg" data-v="${esc(s)}">${esc(s)}</button>`).join('')}</div>
+  <div class="disc">General education only. Follow your allergy action plan.</div>
+  <div class="compose"><div class="inp"><input id="q" placeholder="Ask about allergies..." autocomplete="off"></div>
+    <button class="round ghost ${window.SpeechRecognition||window.webkitSpeechRecognition?'':'hidden'}" data-act="mic" id="mic" aria-label="Voice input">${I.mic}</button>
+    <button class="round" data-act="sendAsk" aria-label="Send">${I.send}</button></div></div>`,
+  bind(p){
+    $('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendAsk()}});
+    scrollDown('#msgs');
+    if(p.prefill){$('#q').value=p.prefill;p.prefill=null;sendAsk()}
+  }};
+const welcome=()=>`<div class="bub bot">Hi ${esc(S.user.name.split(' ')[0])}! I answer allergy questions using trusted allergy education sources, and I show where each answer comes from. ${S.user.allergies.length?`I know you're allergic to <b>${esc(S.user.allergies.join(', '))}</b>.`:''}</div>`;
+function msgHtml(m){
+  if(m.role==='user')return `<div class="bub me">${esc(m.text)}</div>`;
+  const parts=m.text.split('\n\n');let em='';
+  if(m.emergency&&parts[0].startsWith('**')){em=`<span class="em">${mdLite(parts.shift().replace(/\*\*/g,''))}</span>`}
+  const src=m.citations?.length?`<details class="src"><summary>Sources (${m.citations.length})</summary>${m.citations.map(c=>`<div class="it"><b>[${c.n}] ${esc(c.title)}</b>${esc(c.snippet)}</div>`).join('')}</details>`:'';
+  const conf=m.mode&&m.mode!=='safety'?`<div class="meta"><span class="conf"><i style="width:${Math.round((m.confidence||0)*100)}%"></i></span>${m.mode==='abstain'?'Not in my sources':m.mode==='llm'?'AI-written, source-grounded':'Quoted from sources'}</div>`:'';
+  return `<div class="bub bot ${m.emergency?'alert':''}">${em}${mdLite(parts.join('\n\n'))}${src}${conf}</div>`;
+}
+async function sendAsk(){
+  const inp=$('#q');const q=inp.value.trim();if(!q||S.busy)return;
+  S.busy=true;inp.value='';
+  if(!S.chat.length)$('#msgs').innerHTML='';
+  S.chat.push({role:'user',text:q});$('#msgs').insertAdjacentHTML('beforeend',msgHtml(S.chat.at(-1)));
+  $('#msgs').insertAdjacentHTML('beforeend',`<div class="bub bot" id="typing"><div class="typing"><i></i><i></i><i></i></div></div>`);scrollDown('#msgs');
+  $('#sugg')?.classList.add('hidden');
+  try{
+    const hist=S.chat.slice(-7,-1).map(m=>[m.role==='user'?'user':'assistant',m.text]);
+    const r=await api('/ask',{method:'POST',body:{question:q,history:hist}});
+    S.chat.push({role:'bot',...r,text:r.answer});
+  }catch(e){S.chat.push({role:'bot',text:'Sorry, something went wrong: '+e.message,mode:'error'})}
+  $('#typing')?.remove();$('#msgs').insertAdjacentHTML('beforeend',msgHtml(S.chat.at(-1)));scrollDown('#msgs');S.busy=false;
+}
+let _rec=null;
+function toggleMic(target,btn){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;
+  if(_rec){_rec.stop();return}
+  _rec=new SR();_rec.lang='en-GB';_rec.interimResults=false;btn.classList.add('rec');
+  _rec.onresult=e=>{$(target).value=e.results[0][0].transcript};
+  _rec.onend=()=>{_rec=null;btn.classList.remove('rec');if(target==='#q'&&$(target).value)sendAsk()};
+  _rec.onerror=()=>{_rec=null;btn.classList.remove('rec')};_rec.start();
+}
+
+/* ---- Scenario conversation ---- */
+V.scenario={html:p=>`<div class="screen chat">${appbar(esc(p.card.title))}
+  <div class="stage" style="background-image:url('${p.start.background}')"><div class="pts" id="pts">0 pts</div>
+    <div class="who"><div class="av">${p.start.speaker==='Waiter'?'🧑‍🍳':'🧑‍🤝‍🧑'}</div><span>${p.start.speaker}</span></div></div>
+  <div class="msgs" id="msgs"><div class="coach">${esc(p.start.context)}</div><div class="bub bot">${esc(p.start.text)}</div></div>
+  <div class="compose"><div class="inp"><input id="q" placeholder="Type your reply..." autocomplete="off"></div>
+    <button class="round ghost ${window.SpeechRecognition||window.webkitSpeechRecognition?'':'hidden'}" data-act="mic2" id="mic" aria-label="Voice input">${I.mic}</button>
+    <button class="round" data-act="sendSc" aria-label="Send">${I.send}</button></div></div>`,
+  bind(p){p.turn=p.turn||0;p.score=p.score||0;p.log=p.log||[];$('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendSc()}})}};
+async function sendSc(){
+  const v=cur();if(v.name!=='scenario'||S.busy)return;const p=v.p,inp=$('#q'),text=inp.value.trim();if(!text)return;
+  S.busy=true;inp.value='';
+  $('#msgs').insertAdjacentHTML('beforeend',`<div class="bub me">${esc(text)}</div><div class="bub bot" id="typing"><div class="typing"><i></i><i></i><i></i></div></div>`);scrollDown('#msgs');
+  try{
+    const r=await api(`/scenarios/${p.card.id}/chat`,{method:'POST',body:{message:text,turn:p.turn}});
+    p.turn++;p.score+=r.points;p.log.push({text,pts:r.points});
+    $('#typing').outerHTML=`<div class="bub bot">${esc(r.text)}</div><div class="coach ${r.points?'':'bad'}">${esc(r.coach)}</div>`;
+    $('#pts').textContent=p.score+' pts';
+    if(r.done){setTimeout(()=>{addPts(p.score);S.stack[S.stack.length-1]={name:'feedback',p:{card:p.card,score:p.score,log:p.log}};render()},1400)}
+  }catch(e){$('#typing')?.remove();toast(e.message,1)}
+  S.busy=false;scrollDown('#msgs');
+}
+V.feedback={html:p=>{
+  const total=p.log.length*10,pct=total?Math.round(p.score/total*100):0,disclosed=p.log.filter(l=>l.pts).length;
+  return `<div class="screen">${appbar('Feedback')}<div class="pad" style="padding-bottom:32px">
+  <div class="card" style="text-align:center"><div class="datehdr">Final Score</div><div class="score">${p.score}</div><div class="datehdr">${pct}% of available points</div></div>
+  <div class="card"><h6>Personalized Feedback</h6><div class="v" style="line-height:1.6">${pct>=70?'Great work. You spoke up clearly about your allergy and kept control of the conversation.':disclosed?'Good start. Try to mention your allergy early and name the foods you need to avoid, then ask about ingredients.':'You never said you have an allergy. In real life, say it clearly before you order or eat. It is the single most important step.'}</div></div>
+  <div class="card"><h6>Areas for Improvement:</h6>${p.log.filter(l=>!l.pts).length?p.log.filter(l=>!l.pts).map(l=>`<div class="cb" style="align-items:flex-start">⚠️<span>“${esc(l.text)}” had no allergy disclosure.</span></div>`).join(''):'<div class="cb">✅ <span>Nothing missed. Nice job.</span></div>'}</div>
+  <button class="btn btn-primary" data-act="again" data-v="${p.card.id}">Try Again</button>
+  <button class="btn btn-outline" data-act="home">Back to Home</button></div></div>`}};
+
+/* ---- Profile ---- */
+V.profile={html:()=>{
+  const u=S.user,ec=(u.medical||{}).emergencyContact,m=u.medical||{};
+  return `<div class="screen">${appbar('Profile')}<div class="pad" style="padding-bottom:32px">
+  <div class="card" style="text-align:center"><div style="width:72px;height:72px;border-radius:50%;background:var(--primary);color:#fff;font-size:30px;font-weight:600;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">${esc(u.name[0].toUpperCase())}</div><div style="font-size:20px;font-weight:600;color:var(--text)">${esc(u.name)}</div><div class="datehdr">${esc(u.email)}</div></div>
+  <div class="card"><div class="row" style="justify-content:space-between"><h6>Allergies</h6><button data-act="editAllergy" style="color:var(--primary)">${I.edit}</button></div>${u.allergies.length?`<div class="chips">${u.allergies.map(a=>`<span class="chip on">${esc(a)}</span>`).join('')}</div>`:'<div class="datehdr">No allergies selected</div>'}</div>
+  <div class="card"><div class="row" style="justify-content:space-between"><h6>Emergency Contact</h6><button data-act="editMed" style="color:var(--primary)">${I.edit}</button></div>${ec&&ec.name?`<div class="v">${esc(ec.name)}${ec.relationship?' ('+esc(ec.relationship)+')':''}</div><div class="datehdr">${esc(ec.phone||'')}</div>`:'<div class="datehdr">No emergency contact added</div>'}</div>
+  <div class="card"><h6>Medications</h6><div class="v">${m.penType?esc(m.penType)+(m.dosage?' · '+esc(m.dosage):''):'<span class="datehdr">Not specified</span>'}</div></div>
+  <button class="btn btn-outline" data-act="logout" style="color:var(--error);border-color:var(--error)">${I.out}Log Out</button></div></div>`}};
+
+/* =====================================================================
+   ACTIONS (event delegation)
+   ===================================================================== */
+const A={
+  back,
+  signup:()=>push('signup'),login:()=>push('login'),
+  toLogin:()=>{S.stack.pop();push('login')},toSignup:()=>{S.stack.pop();push('signup')},
+  google:()=>toast('Google sign-in needs a Google OAuth client ID. Use email sign-up for now.',1),
+  forgot:()=>toast('Password reset email is not configured in this build.',1),
+  async doSignup(){
+    ['name','email','pw','pw2','agree'].forEach(i=>setErr(i,''));let bad=false;
+    const n=val('name'),e=val('email'),p=$('#pw').value,p2=$('#pw2').value;
+    if(n.length<2||!/^[a-zA-Z\s\-']+$/.test(n)){setErr('name','Name can only contain letters, spaces, hyphens, and apostrophes');bad=true}
+    if(!validEmail(e)){setErr('email','Please enter a valid email address');bad=true}
+    if(p.length<6||!/[a-zA-Z]/.test(p)||!/\d/.test(p)){setErr('pw','Password must be at least 6 characters with a letter and a number');bad=true}
+    if(p!==p2){setErr('pw2','Passwords do not match');bad=true}
+    if(!$('#agree').checked){setErr('agree','Please accept the terms to continue');bad=true}
+    if(bad)return;busy('#go',1);
+    try{session(await api('/auth/signup',{method:'POST',body:{name:n,email:e,password:p}}));route()}catch(x){toast(x.message,1);busy('#go',0,'Create Account')}
+  },
+  async doLogin(){
+    setErr('email','');setErr('pw','');const e=val('email'),p=$('#pw').value;
+    if(!validEmail(e))return setErr('email','Please enter a valid email address');if(!p)return setErr('pw','Password is required');
+    busy('#go',1);try{session(await api('/auth/login',{method:'POST',body:{email:e,password:p}}));route()}catch(x){toast(x.message,1);busy('#go',0,'Log In')}
+  },
+  tagTog(el){const v=el.dataset.v;_asel.has(v)?_asel.delete(v):_asel.add(v);_adraw()},
+  skipAllergy(){sessionStorage.setItem('aahar_skip_allergy','1');push('medical')},
+  async saveAllergy(){
+    if(!_asel.size)return toast('Pick at least one allergen, or tap Skip.',1);
+    try{S.user=await api('/me',{method:'PUT',body:{allergies:[..._asel]}});sessionStorage.setItem('aahar_skip_allergy','1');
+      if(S.stack[0].name==='profile'||S.stack.some(s=>s.name==='home')){S.stack.pop();render()}else push('medical')}catch(e){toast('Failed to save allergens. Please try again.',1)}
+  },
+  skipMed(){reset('home')},
+  async saveMed(){
+    const name=val('cn'),phone=val('cp'),rel=val('cr');
+    if(phone&&!/^[+()\d\s-]{7,}$/.test(phone))return setErr('cp','Please enter a valid phone number');
+    try{S.user=await api('/me',{method:'PUT',body:{medical:{penType:val('pen'),dosage:val('dose'),emergencyContact:{name,phone,relationship:rel}}}});
+      S.stack.some(s=>s.name==='home')?(back()):reset('home')}catch(e){toast(e.message,1)}
+  },
+  tab(el){S.tab=+el.dataset.v;drawTab()},
+  scTab(el){S.scTab=+el.dataset.v;drawTab()},
+  locked(el){toast(`Unlock with ${el.dataset.n} points. You have ${pts()} so far.`,1)},
+  async scenario(el){
+    const id=el.dataset.v,card=S.scen.find(s=>s.id===id);
+    try{const start=await api(`/scenarios/${id}/start`);push('scenario',{card,start})}catch(e){toast(e.message,1)}
+  },
+  again(el){S.stack.pop();A.scenario({dataset:{v:el.dataset.v}})},
+  home(){S.tab=1;reset('home')},
+  exposure(){push('exposure',{date:S.calSel||undefined})},
+  scan:()=>push('scan'),
+  manualScan(){const c=val('bc');if(!c)return toast('Enter a barcode number first.',1);stopCam();doScan(c)},
+  rescan(){S.stack.pop();push('scan')},
+  ask:()=>push('ask'),
+  askFromLearn(){push('ask',{prefill:S.learnQ})},
+  sugg(el){$('#q').value=el.dataset.v;sendAsk()},
+  sendAsk,sendSc,mic:el=>toggleMic('#q',el),mic2:el=>toggleMic('#q',el),
+  profile:()=>push('profile'),editAllergy:()=>push('allergy'),editMed:()=>push('medical'),
+  logout(){doLogout()},
+  lt(el){S.learnTab=el.dataset.v;S.learnQ='';drawTab()},
+  lclear(){S.learnQ='';drawTab()},
+  learnRetry(){delete S.learn[S.learnTab];drawTab()},
+  xc(el){el.parentElement.classList.toggle('open')},
+  calPrev(){S.calMonth=new Date(S.calMonth.getFullYear(),S.calMonth.getMonth()-1,1);drawTab()},
+  calNext(){S.calMonth=new Date(S.calMonth.getFullYear(),S.calMonth.getMonth()+1,1);drawTab()},
+  calDay(el){S.calSel=el.dataset.v;drawTab()},
+  async delLog(el){
+    if(!confirm('Delete this exposure log?'))return;
+    try{await api('/logs/'+el.dataset.v,{method:'DELETE'});S.logs=S.logs.filter(l=>l.id!=el.dataset.v);toast('Exposure log deleted successfully');drawTab()}catch{toast('Failed to delete exposure log',1)}
+  },
+  sev(el){$$('.sev button').forEach(b=>{b.classList.remove('on');b.style.background=''});el.classList.add('on');el.style.background=el.dataset.c;window._sev=el.dataset.v},
+  medchip(el){$$('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');$('#xmedname').value=el.dataset.v},
+  async saveLog(){
+    busy('#go',1);
+    const body={date:val('xdate')||iso(new Date()),foodEaten:val('xfood'),symptoms:$$('.sx:checked').map(c=>c.value),severity:window._sev||'mild',
+      timeToFirstSymptom:val('xtime'),tookMedication:$('#xmed').checked,medicationUsed:$('#xmed').checked?val('xmedname'):'',treatmentTime:val('xtreat'),notes:val('xnotes')};
+    window._sev=null;
+    try{await api('/logs',{method:'POST',body});S.logsLoaded=false;S.calSel=body.date;S.tab=2;S.calMonth=new Date(body.date+'T12:00:00');S.stack=S.stack.filter(s=>s.name==='home');render();toast('Accidental exposure saved successfully!')}
+    catch(e){busy('#go',0,'Save Log');toast('Failed to save accidental exposure. Please try again.',1)}
+  },
+  sos(){
+    const ec=(S.user.medical||{}).emergencyContact;
+    if(!ec||!ec.phone)return toast('No emergency contact found. Please update your medical information.',1);
+    const m=document.createElement('div');m.className='modal';
+    m.innerHTML=`<div class="dlg"><h3><span class="ib">${I.phone}</span>Emergency Call</h3><div style="margin-top:14px;font-weight:500">Call your emergency contact?</div>
+    <div class="box">👤 ${esc(ec.name||'Emergency Contact')}<br>📞 ${esc(ec.phone)}</div>
+    <div class="acts"><button data-act="close" style="color:var(--text2)">Cancel</button><button class="go" data-act="call" data-v="${esc(ec.phone)}">Call Now</button></div></div>`;
+    $('#app').append(m);
+  },
+  close(){$('.modal')?.remove()},
+  call(el){$('.modal')?.remove();location.href='tel:'+el.dataset.v.replace(/[^\d+]/g,'')},
+};
+function busy(sel,on,label){const b=$(sel);if(!b)return;b.disabled=!!on;b.innerHTML=on?'<div class="spin"></div>':label}
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  if(el.dataset.act==='back'&&cur().name==='scan')stopCam();
+  const f=A[el.dataset.act];if(f)f(el);
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter'||e.target.tagName!=='INPUT')return;
+  const v=cur()?.name;
+  if(v==='login'){A.doLogin()}else if(v==='signup'&&e.target.id==='pw2'){A.doSignup()}else if(v==='scan'){A.manualScan()}
+});
+api('/allergens').then(a=>{ALLERGENS=a}).catch(()=>{});
+boot();
+</script>
+</body>
+</html>
