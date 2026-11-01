@@ -36,6 +36,30 @@ def create_user(email, name, pw):
         return cur.lastrowid
 
 
+def get_or_create_google_user(email, name):
+    """Get a verified Google identity or create its local account."""
+    normalized_email = email.strip().lower()
+    with conn() as c:
+        existing = c.execute("SELECT id FROM users WHERE email=?", (normalized_email,)).fetchone()
+        if existing:
+            return existing["id"]
+        salt = secrets.token_hex(16)
+        random_password = secrets.token_urlsafe(48)
+        try:
+            cur = c.execute(
+                "INSERT INTO users(email,name,pw,salt,created) VALUES(?,?,?,?,?)",
+                (normalized_email, name.strip()[:50] or normalized_email.split("@", 1)[0],
+                 _hash(random_password, salt), salt, time.time()),
+            )
+            return cur.lastrowid
+        except sqlite3.IntegrityError:
+            # A concurrent Google login may have inserted the same verified email.
+            existing = c.execute("SELECT id FROM users WHERE email=?", (normalized_email,)).fetchone()
+            if existing:
+                return existing["id"]
+            raise
+
+
 def check_login(email, pw):
     with conn() as c:
         u = c.execute("SELECT * FROM users WHERE email=?", (email.lower(),)).fetchone()

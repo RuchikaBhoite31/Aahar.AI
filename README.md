@@ -21,6 +21,10 @@ The repository includes a Render Blueprint in `render.yaml`. To publish the app:
 4. Optionally add `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` as a secret environment variable in Render. Never commit API keys. Without a key, grounded extractive answers still work.
 5. Open the `*.onrender.com` URL Render assigns to the service. Render terminates HTTPS for the public site.
 
+### Enable Google sign-in
+
+Google sign-in requires a Google OAuth **Web application** client ID. In Google Cloud Console, configure the OAuth consent screen, create a Web application credential, and add the exact hosted origin (for example, `https://aahar-ai-pako.onrender.com`) and local development origin (`http://localhost:8000`) as authorized JavaScript origins. Set `GOOGLE_CLIENT_ID` in the Render service's **Environment** settings, then redeploy. No authorized redirect URI is required for this Google Identity Services button flow. The client ID is public; do not put a client secret in the browser or commit one to this repository. The backend verifies each Google ID token, including its audience and verified email, before creating a session. Email/password sign-in remains available without Google configuration.
+
 The Blueprint requests Render's free web-service tier and no paid add-ons. Hosting providers can change pricing and terms, so verify the final plan and estimated cost in Render before confirming deployment. Free instances may sleep when idle and have limited resources. This prototype stores allergy profiles and exposure logs in temporary storage: do not use it with real users or sensitive health information. A public deployment is not automatically a production-ready medical service.
 
 ## What is RAG here?
@@ -61,7 +65,7 @@ Colours, radii, paddings and icons come straight from `AppColors` / `AppConstant
 
 ## Not ported / known gaps
 
-* Google sign-in (needs your OAuth client ID; the button is present and says so).
+* Google sign-in must be enabled with a Google OAuth Web client ID configured for each deployment.
 * Adrenaline-pen reminder push notifications and the Flame waiter sprite animation / OpenAI text-to-speech.
   (Scenario replies are text; the mic button uses the browser's speech recognition where available.)
 * Firebase is replaced by SQLite (`aahar.db`) with PBKDF2-hashed passwords and bearer sessions. Email verification is not implemented.

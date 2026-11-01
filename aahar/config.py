@@ -28,6 +28,7 @@ class Settings:
     openai_base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
     anthropic_api_key = os.getenv("ANTHROPIC_API_KEY", "")
     anthropic_model = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6")
+    google_client_id = os.getenv("GOOGLE_CLIENT_ID", "")
     # Optional dense retrieval (pip install sentence-transformers)
     dense_model = os.getenv("AAHAR_DENSE_MODEL", "")  # e.g. BAAI/bge-small-en-v1.5
     top_k = int(os.getenv("AAHAR_TOP_K", "5"))

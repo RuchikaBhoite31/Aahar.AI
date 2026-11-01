@@ -62,6 +62,8 @@ svg{display:block;flex:none}
 .divider{display:flex;align-items:center;gap:16px;margin:24px 0;color:var(--grey);font-size:14px;font-weight:600}
 .divider:before,.divider:after{content:"";flex:1;height:1px;background:var(--light);box-shadow:0 1px 0 #ececec}
 .btn-google{background:#fff;border:1px solid #dcdfe0;color:var(--text)}
+.google-signin{min-height:44px;width:100%;display:flex;justify-content:center;align-items:center}
+.google-unavailable{font-size:13px;color:var(--text2);text-align:center;padding:10px 8px}
 .alt{text-align:center;margin-top:24px;font-size:14px;color:var(--grey)}
 .chk{display:flex;gap:10px;align-items:flex-start;margin-top:20px;font-size:14px;color:var(--grey)}
 .chk input{width:20px;height:20px;accent-color:var(--primary);margin-top:1px}
@@ -266,7 +268,7 @@ const ALWAYS_OPEN=new Set(['restaurant_beginner','restaurant_advanced','party_in
 const GROUPS={party_intermediate:['Emma','Jake','Maya'],dinner_with_friends:['Sam','Riley','Alex']};
 const SUGGEST=['What is anaphylaxis?','How do I use an adrenaline pen?','Can I drink alcohol with a food allergy?','What should I tell a waiter?','How do I handle peer pressure from friends?','Tips for flying with allergies'];
 
-const S={token:localStorage.getItem('aahar_token'),user:null,stack:[],tab:0,scTab:0,learnTab:'educational',learn:{},learnQ:'',calMonth:new Date(),calSel:null,logs:[],scans:[],chat:[],busy:false};
+const S={token:localStorage.getItem('aahar_token'),user:null,stack:[],tab:0,scTab:0,learnTab:'educational',learn:{},learnQ:'',calMonth:new Date(),calSel:null,logs:[],scans:[],chat:[],busy:false,googleClientId:null,googleReady:false,googleDisabled:false,googleError:false};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const val=id=>($('#'+id)?.value??'').trim();
@@ -321,6 +323,7 @@ function render(){
   const v=cur(),def=V[v.name];
   $('#app').innerHTML=def.html(v.p);
   def.bind&&def.bind(v.p);
+  renderGoogleButtons();
 }
 function validEmail(v){return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v)}
 function setErr(id,msg){const e=$('#e_'+id);if(e)e.textContent=msg||''}
@@ -330,8 +333,50 @@ const field=(id,label,ph,type='text',icon='',extra='')=>`<div class="field"><lab
 const appbar=(t,right='')=>`<div class="appbar"><button class="l" data-act="back" aria-label="Back">${I.back}</button>${t}<div class="r">${right}</div></div>`;
 
 async function boot(){
+  loadGoogleIdentity();
   if(S.token){try{S.user=await api('/me')}catch{S.token=null;localStorage.removeItem('aahar_token')}}
   route();
+}
+async function loadGoogleIdentity(){
+  try{
+    const config=await api('/auth/google/config');
+    if(!config.enabled){S.googleDisabled=true;renderGoogleButtons();return}
+    S.googleClientId=config.client_id;
+    const script=document.createElement('script');
+    script.src='https://accounts.google.com/gsi/client';script.async=true;script.defer=true;
+    script.onload=()=>{
+      if(!window.google?.accounts?.id){S.googleError=true;renderGoogleButtons();return}
+      window.google.accounts.id.initialize({client_id:S.googleClientId,callback:completeGoogleSignIn});
+      S.googleReady=true;renderGoogleButtons();
+    };
+    script.onerror=()=>{S.googleError=true;renderGoogleButtons()};
+    document.head.appendChild(script);
+  }catch{S.googleError=true;renderGoogleButtons()}
+}
+function renderGoogleButtons(){
+  const slots=$$('.google-signin');
+  if(!slots.length)return;
+  for(const slot of slots){
+    slot.replaceChildren();
+    if(S.googleReady&&window.google?.accounts?.id){
+      window.google.accounts.id.renderButton(slot,{type:'standard',theme:'outline',size:'large',text:slot.dataset.text||'signin_with',shape:'rectangular',logo_alignment:'left',width:Math.min(400,Math.max(220,slot.clientWidth||340))});
+    }else if(S.googleError){
+      const hint=document.createElement('div');hint.className='google-unavailable';
+      hint.textContent=S.googleDisabled?'Google sign-in is not configured. Use email sign-up or login.':'Google sign-in is unavailable. Check your connection and try again.';
+      slot.append(hint);
+    }else{
+      const hint=document.createElement('div');hint.className='google-unavailable';hint.textContent='Loading Google sign-in…';slot.append(hint);
+    }
+  }
+}
+async function completeGoogleSignIn(response){
+  if(!response?.credential||S.busy)return;
+  S.busy=true;
+  try{
+    session(await api('/auth/google',{method:'POST',body:{credential:response.credential}}));
+    S.busy=false;route();
+  }
+  catch(e){toast(e.message||'Google sign-in failed. Please try again.',1);S.busy=false}
 }
 function route(){
   if(!S.user)return reset('onboarding');
@@ -359,7 +404,7 @@ V.onboarding={html:()=>`<div class="screen onb">
   </div>
   <div class="onb-btns">
     <button class="btn btn-primary" data-act="signup">Get Started</button>
-    <button class="btn btn-grey" data-act="google">${I.gicon}<span>Continue with Google</span></button>
+    <div id="google-onboarding" class="google-signin" data-text="continue_with" aria-label="Continue with Google"></div>
     <div class="onb-or">Or</div>
     <button class="btn btn-outline" data-act="login">Login to your Account</button>
   </div></div>`};
@@ -377,7 +422,7 @@ V.signup={html:()=>`<div class="screen auth">
   <div style="height:24px"></div>
   <button class="btn btn-primary" id="go" data-act="doSignup">Create Account</button>
   <div class="divider">OR</div>
-  <button class="btn btn-google" data-act="google">${I.gicon}<span>Sign up with Google</span></button>
+  <div id="google-signup" class="google-signin" data-text="signup_with" aria-label="Sign up with Google"></div>
   <div class="alt">Already have an account? <button class="link" data-act="toLogin">Log In</button></div></div>`};
 
 /* ---- Login ---- */
@@ -390,7 +435,7 @@ V.login={html:()=>`<div class="screen auth">
   <div style="height:24px"></div>
   <button class="btn btn-primary" id="go" data-act="doLogin">Log In</button>
   <div class="divider">OR</div>
-  <button class="btn btn-google" data-act="google">${I.gicon}<span>Sign in with Google</span></button>
+  <div id="google-login" class="google-signin" data-text="signin_with" aria-label="Sign in with Google"></div>
   <div class="alt">Don't have an account? <button class="link" data-act="toSignup">Sign Up</button></div></div>`};
 
 /* ---- Allergy selection ---- */
@@ -697,7 +742,6 @@ const A={
   back,
   signup:()=>push('signup'),login:()=>push('login'),
   toLogin:()=>{S.stack.pop();push('login')},toSignup:()=>{S.stack.pop();push('signup')},
-  google:()=>toast('Google sign-in needs a Google OAuth client ID. Use email sign-up for now.',1),
   forgot:()=>toast('Password reset email is not configured in this build.',1),
   async doSignup(){
     ['name','email','pw','pw2','agree'].forEach(i=>setErr(i,''));let bad=false;

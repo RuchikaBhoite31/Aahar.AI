@@ -5,5 +5,6 @@ pydantic>=2.6
 numpy>=1.26
 scikit-learn>=1.4
 pytest>=8.0
+google-auth[requests]>=2.29
 # optional, better semantic recall (set AAHAR_DENSE_MODEL=BAAI/bge-small-en-v1.5):
 # sentence-transformers>=3.0

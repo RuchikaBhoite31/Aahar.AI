@@ -6,6 +6,9 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
+from google.auth.exceptions import GoogleAuthError
+from google.auth.transport.requests import Request as GoogleAuthRequest
+from google.oauth2 import id_token
 
 from . import db, scan, scenarios
 from .allergens import MAJOR_ALLERGENS
@@ -37,6 +40,10 @@ class Login(BaseModel):
     password: str
 
 
+class GoogleLogin(BaseModel):
+    credential: str = Field(min_length=100, max_length=10000)
+
+
 class Profile(BaseModel):
     name: Optional[str] = None
     allergies: Optional[list[str]] = None
@@ -55,7 +62,37 @@ class Chat(BaseModel):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "llm": settings.provider, "chunks": len(retriever().chunks)}
+    return {"ok": True, "llm": settings.provider, "google_auth": bool(settings.google_client_id),
+            "chunks": len(retriever().chunks)}
+
+
+@app.get("/api/auth/google/config")
+def google_auth_config():
+    # OAuth client IDs are public identifiers; the signing secret must never be sent to the browser.
+    return {"enabled": bool(settings.google_client_id), "client_id": settings.google_client_id or None}
+
+
+@app.post("/api/auth/google")
+def google_login(b: GoogleLogin):
+    if not settings.google_client_id:
+        raise HTTPException(503, "Google sign-in is not configured for this deployment.")
+    try:
+        claims = id_token.verify_oauth2_token(
+            b.credential, GoogleAuthRequest(), settings.google_client_id
+        )
+    except ValueError:
+        raise HTTPException(401, "Google sign-in could not be verified. Please try again.")
+    except GoogleAuthError:
+        raise HTTPException(503, "Google verification is temporarily unavailable. Please try again.")
+    email = str(claims.get("email", "")).strip().lower()
+    name = str(claims.get("name", "")).strip()
+    if claims.get("email_verified") is not True or not re.fullmatch(
+        r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", email
+    ):
+        raise HTTPException(401, "Google must provide a verified email address.")
+    uid = db.get_or_create_google_user(email, name)
+    token = db.new_session(uid)
+    return {"token": token, "user": db.user_by_token(token)}
 
 
 @app.post("/api/auth/signup")

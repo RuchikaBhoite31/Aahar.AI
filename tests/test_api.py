@@ -23,6 +23,35 @@ def test_auth_flow_and_validation():
     assert c.get("/api/me", headers=h).status_code == 401
 
 
+def test_google_sign_in_config_and_verified_identity(monkeypatch):
+    from aahar.api import id_token
+    from aahar.config import settings
+
+    assert c.get("/api/auth/google/config").json() == {"enabled": False, "client_id": None}
+    assert c.post("/api/auth/google", json={"credential": "x" * 120}).status_code == 503
+
+    monkeypatch.setattr(settings, "google_client_id", "web-client-id.apps.googleusercontent.com")
+    assert c.get("/api/auth/google/config").json() == {
+        "enabled": True,
+        "client_id": "web-client-id.apps.googleusercontent.com",
+    }
+    monkeypatch.setattr(id_token, "verify_oauth2_token", lambda token, request, audience: {
+        "email": "Google.User@example.com", "email_verified": True, "name": "Google User",
+    })
+    first = c.post("/api/auth/google", json={"credential": "g" * 120})
+    assert first.status_code == 200
+    assert first.json()["user"]["email"] == "google.user@example.com"
+    assert c.get("/api/me", headers={"Authorization": "Bearer " + first.json()["token"]}).status_code == 200
+
+    second = c.post("/api/auth/google", json={"credential": "g" * 120}).json()
+    assert second["user"]["id"] == first.json()["user"]["id"]
+
+    monkeypatch.setattr(id_token, "verify_oauth2_token", lambda token, request, audience: {
+        "email": "unverified@example.com", "email_verified": False, "name": "Unverified",
+    })
+    assert c.post("/api/auth/google", json={"credential": "g" * 120}).status_code == 401
+
+
 def test_profile_ask_logs_scenarios():
     h = auth("p@q.ie")
     me = c.put("/api/me", json={"allergies": ["Peanuts", "Bogus"], "medical": {"emergencyContact": {"name": "Mum", "phone": "087"}}}, headers=h).json()
