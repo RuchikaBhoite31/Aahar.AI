@@ -60,7 +60,8 @@ def _is_menu_question(message):
     return bool(re.search(
         r"ingredient|contain|have in|what is in|what's in|allergen|safe|cross.?contact|cross.?contamin|"
         r"prepare|prepar|sauce|suitable|gluten|peanut|nut|milk|dairy|egg|prawn|shrimp|fish|sesame|"
-        r"celery|mustard|soya|soy|lupin|sulphite|sulfite|menu|dish|food", message, re.I
+        r"celery|mustard|soya|soy|lupin|sulphite|sulfite|menu|dish|food|order|recommend|suggest|"
+        r"what can i (?:eat|order)|what do you have|which .* (?:choose|order)", message, re.I
     ))
 
 
@@ -108,6 +109,23 @@ def _restaurant_reply(sid, msg, history, allergens):
     if disclosure and not asks_for_options:
         return ("Thanks for telling me. I'll flag that for the kitchen. Which dish are you thinking about "
                 "so I can check its ingredients and preparation?")
+
+    wants_recommendation = bool(re.search(
+        r"\brecommend|suggest|what can i (?:eat|order)|what do you have|what should i (?:get|order)|"
+        r"which (?:dish|meal|food|starter|main)\b", msg, re.I
+    ))
+    if wants_recommendation:
+        if not allergens:
+            return ("I can help narrow down the training menu, but I don't have your allergies yet. "
+                    "Please tell the waiter your allergies first, then we can check specific dishes and preparation.")
+        matches = [item for item in menu if not (item.allergens & set(allergens))]
+        if matches:
+            names = ", ".join(item.title.split("›")[-1].strip() for item in matches[:4])
+            return (f"Based only on allergens listed in this training menu, these dishes do not list "
+                    f"{', '.join(sorted(allergens))}: {names}. This is not a safety guarantee; "
+                    "please ask staff to verify all ingredients, hidden allergens, and cross-contact before ordering.")
+        return (f"I can't identify an option from this training menu that avoids the allergens listed on your profile "
+                f"({', '.join(sorted(allergens))}). Please ask staff about alternatives and how they are prepared.")
 
     if re.search(r"cross.?contact|cross.?contamin|shared (?:fryer|oil|equipment|utensil)|separate(?:ly)? prepared", msg, re.I):
         return ("I'll check with the kitchen whether they use clean, separate equipment and avoid shared cooking oil. "
@@ -170,8 +188,12 @@ def reply(sid, msg, allergens, turn, history=None):
         who, maxt = "Waiter", sc.get("maxTurns", 8)
     if disclosed:
         coach = "Nice - you clearly disclosed your allergy. Next, ask about the ingredients and cross-contact for a specific dish."
+    elif re.search(r"\brecommend|suggest|what can i|which (dish|meal|food)", msg, re.I):
+        coach = "Before choosing, tell the waiter your allergies and ask them to verify a specific dish's ingredients and preparation."
     elif _is_menu_question(msg):
         coach = "Good safety question. Also clearly tell the waiter or host which allergy you need them to flag."
+    elif re.search(r"\?|\brecommend|suggest|what can i|which (dish|meal|food)", msg, re.I):
+        coach = "Before choosing, tell the waiter your allergies and ask them to verify a specific dish's ingredients and preparation."
     else:
         coach = "Tip: say clearly that you have an allergy and which food(s), before ordering or eating."
     return {"speaker": who, "text": text, "coach": coach, "points": 10 if disclosed else 0, "done": turn + 1 >= maxt}

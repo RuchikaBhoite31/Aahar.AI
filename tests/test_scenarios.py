@@ -68,6 +68,17 @@ def test_allergen_question_is_not_scored_as_disclosure():
     assert reply("restaurant_beginner", "I have a peanut allergy.", PROFILE_ALLERGENS, 0)["points"] == 10
 
 
+def test_generic_order_request_returns_cautious_personalized_options():
+    result = reply("restaurant_beginner", "What can I order?", ["Peanuts"], 0)
+    assert "do not list Peanuts" in result["text"]
+    assert "Tomato & Basil Soup" in result["text"]
+    assert "not a safety guarantee" in result["text"]
+    assert "Before choosing" in result["coach"]
+
+    no_profile = reply("restaurant_beginner", "Could you recommend something?", [], 0)
+    assert "don't have your allergies yet" in no_profile["text"]
+
+
 def test_group_scenario_admits_unknown_cake_ingredients_instead_of_guessing():
     result = reply(
         "party_intermediate",
