@@ -87,7 +87,7 @@ def _units(content) -> list[tuple[str, str]]:
         elif words <= 22 and para.endswith("?"):
             out.append(("sub", para.rstrip("?").strip() + "?"))
         else:
-            if not para.endswith((".", "!", "?", ":", ";", '"', "”", ")")):
+            if not re.search(r'[.!?]["”\')\]]?$', para):
                 para += "."
             out.append(("text", para))
     final = []

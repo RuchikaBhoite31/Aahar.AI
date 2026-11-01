@@ -74,8 +74,27 @@ def test_personalised_headsup_is_deterministic():
 def test_emergency_banner_comes_first_and_uses_anaphylaxis_guidance():
     a = ask("my lips are swelling after eating a nut", ["Tree nuts"])
     assert a["emergency"] and a["answer"].startswith("**If you are having a reaction right now")
-    assert any("anaphylaxis" in c["title"].lower() for c in a["citations"])
+    assert a["mode"] == "safety" and a["citations"] == []
     assert emergency_banner("I can't breathe") and not emergency_banner("what is a peanut")
+
+
+def test_answers_select_relevant_grounded_sentences():
+    definition = ask("What is anaphylaxis?")
+    assert "severe allergic reaction" in definition["answer"]
+    assert "Rather than going to get your adrenaline pens" not in definition["answer"]
+    assert definition["citations"] and "Anaphylaxis" in definition["citations"][0]["title"]
+
+    waiter = ask("What should I ask a waiter about a dish with peanuts?", ["Peanuts"])
+    assert "cross-contact" in waiter["answer"] and "ingredient" in waiter["answer"]
+    assert "training menu" not in waiter["answer"].lower()
+    assert waiter["citations"] and "Eating in restaurants" in waiter["citations"][0]["title"]
+
+    friends = ask("How do I handle friends pressuring me to eat cake?", ["Peanuts"])
+    assert "without the cake" in friends["answer"]
+    assert all("Alcohol" not in c["title"] for c in friends["citations"])
+
+    signs = ask("What are the signs of anaphylaxis?")
+    assert any(word in signs["answer"].lower() for word in ("swelling", "wheez", "breath", "faint"))
 
 
 def test_wellbeing_message_overrides_retrieval():

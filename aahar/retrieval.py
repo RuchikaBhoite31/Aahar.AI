@@ -37,6 +37,11 @@ INTENT = {
     "inhaler": "asthma", "wheeze": "asthma", "outgrow": "tolerance introduce challenge",
     "test": "tests skin prick blood challenge", "tests": "skin prick blood challenge",
     "nasal": "neffy nasal spray adrenaline", "spray": "neffy nasal spray",
+    "waiter": "restaurant staff ingredients sauces cross-contact allergy questions",
+    "waitress": "restaurant staff ingredients sauces cross-contact allergy questions",
+    "server": "restaurant staff ingredients sauces cross-contact allergy questions",
+    "signs of anaphylaxis": "what happens in anaphylaxis swelling tongue throat breathing wheeze blood pressure faint symptoms",
+    "symptoms of anaphylaxis": "what happens in anaphylaxis swelling tongue throat breathing wheeze blood pressure faint symptoms",
 }
 
 

@@ -60,49 +60,88 @@ def llm_complete(system: str, user: str) -> Optional[str]:
 
 
 def extractive_answer(question: str, hits: list[Hit], max_sentences: int = 3, weight=None) -> str:
-    """Offline fallback: choose the most question-relevant sentences verbatim from the top sources.
-    Sentences are scored by IDF-weighted query-term coverage, so rare, specific words
-    (e.g. 'adrenaline', 'lupin') matter more than generic ones."""
+    """Return concise, verbatim evidence instead of dumping the start of a passage.
+
+    This deterministic path is used when no LLM key is configured. It ranks individual
+    source sentences against the question and retains their source citations.
+    """
     if hits and hits[0].chunk.kind == "menu" and hits[0].coverage >= 0.5:
         # structured menu record: the whole record *is* the answer (name, allergens, hidden allergens, safe-or-not)
         return "\n".join(f"• {x.strip()} [1]" for x in _split_sentences(hits[0].chunk.text) if x.strip())
-    q = set(tokenize(question))
+
+    core = set(tokenize(question))
     w = weight or (lambda t: 1.0)
-    denom = sum(w(t) for t in q) or 1.0
+    term_weights = {t: w(t) for t in core}
+    if re.search(r"\b(signs|symptoms)\b", question, re.I) and re.search(r"\banaphylaxis\b", question, re.I):
+        for term in tokenize("swelling tongue throat breathing wheeze cough blood pressure dizzy faint collapse confused drowsy"):
+            if term not in term_weights:
+                term_weights[term] = 0.65 * w(term)
+    if re.search(r"\b(waiter|waitress|server|restaurant|chef|staff)\b", question, re.I):
+        for term in tokenize("restaurant ingredients sauces preparation cross contact equipment separately"):
+            if term not in term_weights:
+                term_weights[term] = 0.2 * w(term)
+    denom = sum(term_weights.values()) or 1.0
+    asks_definition = bool(re.search(r"\b(what is|define|meaning of|what does .* mean)\b", question, re.I))
+    asks_action = bool(re.search(r"\b(what should i do|what do i do|how do i|what to do)\b", question, re.I))
 
     def sentences(chunk):
+        if chunk.kind == "dialogue":
+            quoted = re.findall(r"[\"“]([^\"”]+)[\"”]", chunk.text)
+            if quoted:
+                return [f"“{quote.strip()}”" for quote in quoted if 6 <= len(quote.split()) <= 55]
         out = []
-        for sent in _split_sentences(chunk.text):            # break very long ';' lists into readable pieces
-            out += [x.strip() for x in sent.split("; ")] if len(sent.split()) > 40 else [sent.strip()]
-        return [x if x.endswith((".", "!", "?")) else x + "." for x in out if x]
+        for sent in _split_sentences(chunk.text):
+            parts = sent.split("; ") if len(sent.split()) > 35 else [sent]
+            for part in parts:
+                part = part.strip().strip("•- ")
+                if part and not part.endswith((".", "!", "?")):
+                    part += "."
+                if 1 <= len(part.split()) <= 55 and not re.fullmatch(r"[\W\d_]+", part):
+                    out.append(part)
+        return out
 
-    scored = []                                              # (chunk_score, rank, sentences, best_idx)
-    for n, h in enumerate(hits[:3], 1):
-        sents = sentences(h.chunk)
-        title_toks = set(tokenize(h.chunk.title))
-        ctx = 0.5 * sum(w(t) for t in q if t in title_toks) / denom   # heading match = context credit
-        best_i, best = 0, -1.0
-        for i, sent in enumerate(sents):
-            toks = set(tokenize(sent))
-            sc = sum(w(t) for t in q if t in toks) / denom - 0.01 * i
-            if sc > best:
-                best_i, best = i, sc
-        scored.append((best + ctx + 0.3 / n, n, sents, best_i))
-    if not scored:
+    candidates = []  # (score, source number, sentence, normalized tokens)
+    for n, hit in enumerate(hits[:5], 1):
+        title_tokens = set(tokenize(hit.chunk.title))
+        source_bonus = 0.01 / n
+        for sent in sentences(hit.chunk):
+            tokens = set(tokenize(sent))
+            matched = sum(value for term, value in term_weights.items() if term in tokens)
+            coverage = matched / denom
+            if coverage <= 0:
+                continue
+            score = coverage + source_bonus
+            definition_sentence = bool(re.search(r"\b(is|means|refers to)\s+(a|an|the)\b", sent, re.I))
+            if asks_definition and definition_sentence:
+                score += 1.0
+            if asks_action and re.search(r"\b(should|use|ask|call|tell|check|make sure|lie down)\b", sent, re.I):
+                score += 0.15
+            if core & title_tokens:
+                score += 0.03
+            candidates.append((score, n, sent, tokens))
+
+    if not candidates:
         return ""
-    scored.sort(reverse=True)
-    lines, words = [], 0
-    _, n, sents, i = scored[0]
-    start = 0 if i < 5 else i - 1                            # lead with the passage opening unless the match is deep inside a long chunk
-    for sent in sents[start:]:
-        if words >= 85 or len(lines) >= 4:
+    if asks_definition:
+        definitions = [candidate for candidate in candidates
+                       if re.search(r"\b(is|means|refers to)\s+(a|an|the)\b", candidate[2], re.I)]
+        if definitions:
+            candidates = definitions
+    candidates.sort(key=lambda item: item[0], reverse=True)
+    best_score = candidates[0][0]
+    selected, selected_tokens, title_counts = [], [], {}
+    for score, n, sent, tokens in candidates:
+        title = hits[n - 1].chunk.title
+        if score < max(0.16, best_score * 0.42) or title_counts.get(title, 0) >= 2:
+            continue
+        if any(len(tokens & prior) / max(1, len(tokens | prior)) > 0.72 for prior in selected_tokens):
+            continue
+        selected.append(f"• {sent} [{n}]")
+        selected_tokens.append(tokens)
+        title_counts[title] = title_counts.get(title, 0) + 1
+        if len(selected) >= max_sentences:
             break
-        lines.append(f"• {sent} [{n}]"); words += len(sent.split())
-    if len(scored) > 1 and scored[1][0] >= 0.75 * scored[0][0] and scored[1][2][0:1]:
-        _, n2, sents2, i2 = scored[1]
-        if hits[n2 - 1].chunk.title != hits[n - 1].chunk.title:
-            lines.append(f"• {sents2[i2]} [{n2}]")
-    return "\n".join(lines)
+    return "\n\n".join(selected)
 
 
 def validate_citations(text: str, n_sources: int) -> tuple[str, bool]:
