@@ -58,6 +58,7 @@ class Ask(BaseModel):
 class Chat(BaseModel):
     message: str = Field(min_length=1, max_length=400)
     turn: int = 0
+    history: list[str] = Field(default_factory=list, max_length=10)
 
 
 @app.get("/api/health")
@@ -194,7 +195,7 @@ def scen_start(sid: str, u=Depends(me)):
 
 @app.post("/api/scenarios/{sid}/chat")
 def scen_chat(sid: str, b: Chat, u=Depends(me)):
-    return scenarios.reply(sid, b.message, u["allergies"], b.turn)
+    return scenarios.reply(sid, b.message, u["allergies"], b.turn, b.history)
 
 
 app.mount("/assets", StaticFiles(directory=WEB / "assets"), name="assets")

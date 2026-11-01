@@ -68,7 +68,13 @@ def test_profile_ask_logs_scenarios():
     ids = [s["id"] for s in c.get("/api/scenarios").json()]
     assert {"restaurant_beginner", "party_intermediate", "dinner_with_friends"} <= set(ids)
     s = c.post("/api/scenarios/restaurant_intermediate/chat", json={"message": "does the prawn cocktail contain egg?"}, headers=h).json()
-    assert "Declared allergens" in s["text"] and s["points"] == 10
+    assert "Declared allergens" in s["text"] and s["points"] == 0
+    followup = c.post("/api/scenarios/restaurant_intermediate/chat", json={
+        "message": "Does it contain peanuts?", "turn": 1,
+        "history": ["Can you check the Chicken Satay Skewers ingredients?"],
+    }, headers=h).json()
+    assert "Chicken Satay Skewers" in followup["text"]
+    assert "Declared allergens: peanuts, soybeans" in followup["text"]
     assert c.post("/api/scenarios/party_intermediate/chat", json={"message": "sure"}, headers=h).json()["points"] == 0
 
 

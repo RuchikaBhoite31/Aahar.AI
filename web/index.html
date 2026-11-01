@@ -708,7 +708,7 @@ async function sendSc(){
   S.busy=true;inp.value='';
   $('#msgs').insertAdjacentHTML('beforeend',`<div class="bub me">${esc(text)}</div><div class="bub bot" id="typing"><div class="typing"><i></i><i></i><i></i></div></div>`);scrollDown('#msgs');
   try{
-    const r=await api(`/scenarios/${p.card.id}/chat`,{method:'POST',body:{message:text,turn:p.turn}});
+    const r=await api(`/scenarios/${p.card.id}/chat`,{method:'POST',body:{message:text,turn:p.turn,history:p.log.map(item=>item.text).slice(-6)}});
     p.turn++;p.score+=r.points;p.log.push({text,pts:r.points});
     $('#typing').outerHTML=`<div class="bub bot">${esc(r.text)}</div><div class="coach ${r.points?'':'bad'}">${esc(r.coach)}</div>`;
     $('#pts').textContent=p.score+' pts';
