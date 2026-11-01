@@ -14,3 +14,5 @@ services:
         value: auto
       - key: AAHAR_EMERGENCY_NUMBER
         value: "112 / 999"
+      - key: GOOGLE_CLIENT_ID
+        value: 331358006720-5jkav09rk3gl5oc5pj8827boqnlmol7l.apps.googleusercontent.com
